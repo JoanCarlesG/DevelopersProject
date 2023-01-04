@@ -6,5 +6,10 @@
  */
 class ApplicationController extends Controller 
 {
-	
+	function homeAction(){
+        $this->view;
+    }
+    function taskAction(){
+        $this->view;
+    }
 }
