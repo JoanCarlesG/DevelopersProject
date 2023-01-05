@@ -12,7 +12,7 @@ class ApplicationController extends Controller
 	function homeAction(){
         //veure que es crea l'objecte Tasks a partir del model creat, i que emmagatzema la informació del JSON
         $model = new Tasks;
-        $table = $model->_getTable();
+        $table = $model->getData();
         var_dump($table);
         $this->view;
     }
