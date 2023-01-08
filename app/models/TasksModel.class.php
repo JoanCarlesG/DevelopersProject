@@ -27,7 +27,7 @@ class Tasks extends Model
 
     public function listTasks()
     {
-        return getData();
+        return $this->getData();
     }
 
     public function addTask()
