@@ -1,15 +1,13 @@
-<button type="button" onclick="window.location='./home'">Home</button>
-<br>
 TASK EDITOR
-<br>
+<br><br>
 <form action="./saved" method="post">
-    Title: <input type="text" name="title"><br>
-    Description: <input type="text" name="desc"><br>
+    Title: <input type="text" name="title"><br><br>
+    Description: <input type="text" name="desc"><br><br>
     Status: <select name="status">
         <option value="todo">To Do</option>
         <option value="doing">Doing</option>
         <option value="done">Done</option>
-    </select>
+    </select><br><br>
     <input type="submit">
 </form>
 
@@ -20,5 +18,5 @@ if (isset($_POST["title"]) && isset($_POST["desc"]) && isset($_POST["status"])) 
     $data["desc"] = $_POST["desc"];
     $data["status"] = $_POST["status"];
 }
-
+//convertir json en array, o $data convertida a stdclass epr afegirla a l'array de la base de dades
 ?>
