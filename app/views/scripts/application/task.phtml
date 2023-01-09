@@ -1,5 +1,22 @@
-<?php 
-echo "This is the single task page";
+TASK EDITOR
+<br><br>
+<form action="./saved" method="post">
+    Title: <input type="text" name="title"><br><br>
+    Description: <input type="text" name="desc"><br><br>
+    Status: <select name="status">
+        <option value="todo">To Do</option>
+        <option value="doing">Doing</option>
+        <option value="done">Done</option>
+    </select><br><br>
+    <input type="submit">
+</form>
+
+<?php
+if (isset($_POST["title"]) && isset($_POST["desc"]) && isset($_POST["status"])) {
+    $data[] = "";
+    $data["title"] = $_POST["title"];
+    $data["desc"] = $_POST["desc"];
+    $data["status"] = $_POST["status"];
+}
+//convertir json en array, o $data convertida a stdclass epr afegirla a l'array de la base de dades
 ?>
-<br>
-<button type="button" onclick="window.location='./home'">Home</button>
