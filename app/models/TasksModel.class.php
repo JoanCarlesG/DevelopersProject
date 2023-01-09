@@ -22,7 +22,9 @@ class Tasks extends Model
     }
 
     public function saveData($data) {
-        //to do
+        //$encodedData = json_encode($data);
+        //return (array) file_put_contents($this->_dbh, $encodedData);
+        return (array) json_encode(file_put_contents($this->_dbh, $data));
     }
 
     public function listTasks()
