@@ -46,12 +46,3 @@ spl_autoload_register('autoloader');
 
 $router = new Router();
 $router->execute($routes);
-
-function dd($value)
-{
-    echo "<pre>";
-    var_dump($value);
-    echo "</pre>";
-
-    //die();
-}

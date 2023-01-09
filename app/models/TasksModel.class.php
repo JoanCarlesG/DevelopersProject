@@ -16,15 +16,17 @@ class Tasks extends Model
         $this->_dbh = ROOT_PATH . '/web/' . $db . '.json';
     }
 
+    public function getDB(){
+        return $this->_dbh;
+    }
     // parse json db into an array
     public function getData() {
         return (array) json_decode(file_get_contents($this->_dbh));
     }
 
-    public function saveData($data) {
-        //$encodedData = json_encode($data);
-        //return (array) file_put_contents($this->_dbh, $encodedData);
-        return (array) json_encode(file_put_contents($this->_dbh, $data));
+    public function saveData($newData) {
+        file_put_contents($this->_dbh, $newData);
+        return (array) json_decode(file_get_contents($this->_dbh));
     }
 
     public function listTasks()
