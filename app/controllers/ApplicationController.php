@@ -13,7 +13,7 @@ class ApplicationController extends Controller
         //veure que es crea l'objecte Tasks a partir del model creat, i que emmagatzema la informació del JSON
         $model = new Tasks;
         $table = $model->getData();
-        var_dump($table);
+        dd($table);
         $this->view;
     }
     function taskAction(){
