@@ -18,7 +18,7 @@ if (isset($_POST["title"]) && isset($_POST["desc"]) && isset($_POST["status"])) 
     
     $model = new Tasks;
     
-    $id = $model->getTaskID();
+    $id = $model->getLastTaskID();
     //"task_id" to set index in DB, ++task_id to set new "task_id" value
     $newData = array(
         $id => array(
@@ -33,7 +33,7 @@ if (isset($_POST["title"]) && isset($_POST["desc"]) && isset($_POST["status"])) 
         "end_date" => ""
     ));
 
-    $model->saveData($newData);
+    $model->addTask($newData);
     echo "<br>"."Saved Data"."<br>";
 
     //TESTING

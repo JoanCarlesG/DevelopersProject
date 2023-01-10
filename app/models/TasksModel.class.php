@@ -24,7 +24,7 @@ class Tasks extends Model
         return (array) json_decode(file_get_contents($this->_dbh, true));
     }
 
-    public function saveData($newData) {
+    public function addTask($newData) {
         //DB decode to array, merge the 2 arrays, encode the new array, put contents in DB. Returns DB updated and decoded.
         $dbData = $this->getData();
         $mergedData = array_merge($dbData, $newData);
@@ -36,10 +36,6 @@ class Tasks extends Model
     public function listTasks()
     {
         //return getData();
-    }
-
-    public function addTask()
-    {
     }
 
     public function deleteTask()
@@ -54,7 +50,7 @@ class Tasks extends Model
         //Sets timestamp in this format => Hour:Min:Sec Day/Month/Year
         return (date('h:i:s d/m/Y', time()));
     }
-    public function getTaskID(){
+    public function getLastTaskID(){
         //Gets last item from the DB to get the "task_id" value
         $dbData = $this->getData();
         $lastItem = end($dbData);
