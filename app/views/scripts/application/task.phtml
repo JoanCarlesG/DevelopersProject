@@ -17,15 +17,14 @@ TASK EDITOR
 if (isset($_POST["title"]) && isset($_POST["desc"]) && isset($_POST["status"])) {
     
     $model = new Tasks;
-    $dbData = $model->getData();
-    $lastItem = end($dbData);
-    $lastItemId = $lastItem->{"task_id"};
-
+    
+    $id = $model->getTaskID();
+    //"task_id" to set index in DB, ++task_id to set new "task_id" value
     $newData = array(
-        $lastItemId => array(
+        $id => array(
         "user_id" => 1,
         "name" => "UserName",
-        "task_id" => ++$lastItemId,
+        "task_id" => ++$id,
         "title" => $_POST["title"],
         "desc" => $_POST["desc"],
         "status" => $_POST["status"],
@@ -34,10 +33,10 @@ if (isset($_POST["title"]) && isset($_POST["desc"]) && isset($_POST["status"])) 
         "end_date" => ""
     ));
 
-    $mergedData = array_merge($dbData, $newData);
-    $encodedMerge = json_encode($mergedData, JSON_PRETTY_PRINT);
-    $model->saveData($encodedMerge);
-    echo "Saved Data";
+    $model->saveData($newData);
+    echo "<br>"."Saved Data"."<br>";
+
+    //TESTING
     $table = $model->getData();
     echo "<pre>";
     var_dump($table);

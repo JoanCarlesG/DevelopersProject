@@ -25,7 +25,11 @@ class Tasks extends Model
     }
 
     public function saveData($newData) {
-        file_put_contents($this->_dbh, $newData);
+        //DB decode to array, merge the 2 arrays, encode the new array, put contents in DB. Returns DB updated and decoded.
+        $dbData = $this->getData();
+        $mergedData = array_merge($dbData, $newData);
+        $encodedMerge = json_encode($mergedData, JSON_PRETTY_PRINT);
+        file_put_contents($this->_dbh, $encodedMerge);
         return (array) json_decode(file_get_contents($this->_dbh));
     }
 
@@ -46,9 +50,15 @@ class Tasks extends Model
     {
     }
 
-    public function setDate()
-    {
+    public function setDate(){
+        //Sets timestamp in this format => Hour:Min:Sec Day/Month/Year
         return (date('h:i:s d/m/Y', time()));
     }
-
+    public function getTaskID(){
+        //Gets last item from the DB to get the "task_id" value
+        $dbData = $this->getData();
+        $lastItem = end($dbData);
+        $lastItemId = $lastItem->{"task_id"};
+        return $lastItemId;
+    }
 }
