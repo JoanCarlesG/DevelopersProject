@@ -21,7 +21,7 @@ class Tasks extends Model
     }
     // parse json db into an array
     public function getData() {
-        return (array) json_decode(file_get_contents($this->_dbh));
+        return (array) json_decode(file_get_contents($this->_dbh, true));
     }
 
     public function saveData($newData) {
@@ -46,5 +46,9 @@ class Tasks extends Model
     {
     }
 
+    public function setDate()
+    {
+        return (date('h:i:s d/m/Y', time()));
+    }
 
 }
