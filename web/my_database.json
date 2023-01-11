@@ -1,6 +1,8 @@
 [
     {
         "user_id": 1,
+        "email": "myemail@email.com",
+        "pwd": "1234",
         "name": "UserName",
         "task_id": 1,
         "title": "TaskTitle 1",
@@ -11,7 +13,22 @@
         "end_date": ""
     },
     {
+        "user_id": 2,
+        "email": "seconduser@email.com",
+        "pwd": "1234",
+        "name": "UserName",
+        "task_id": 1,
+        "title": "TaskTitle 1",
+        "desc": "Task description 1",
+        "status": "DONE",
+        "start_date": "",
+        "mod_date": "",
+        "end_date": ""
+    },
+    {
         "user_id": 1,
+        "email": "myemail@email.com",
+        "pwd": "1234",
         "name": "UserName",
         "task_id": 2,
         "title": "TaskTitle 2",
