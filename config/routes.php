@@ -11,7 +11,7 @@
  */
 $routes = array(
 	'/test' => 'test#index',
-	'/' => 'application#home',
+	'/' => 'application#login',
 	'/home' => 'application#home',
 	'/task' => 'application#task',
 );
