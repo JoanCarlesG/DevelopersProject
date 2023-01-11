@@ -41,7 +41,8 @@
                             </div>
                             <div class="text-gray-400"><?php print($data[$i]->desc) ?></div>
                         </div>
-                        <div class="w-1/12 text-sm">Edit</div>
+                        <div class="w-1/12 text-sm"><?php $task_id = $data[$i]->task_id;
+                        echo "<a href='update_task?task_id=" . $task_id . "'>Edit</a>"?></div>
                         <div class="w-1/12 text-sm">Delete</div>
                     </div>
                 </div>
