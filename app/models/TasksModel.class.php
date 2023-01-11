@@ -48,7 +48,7 @@ class Tasks extends Model
 
     public function setDate(){
         //Sets timestamp in this format => Hour:Min:Sec Day/Month/Year
-        return (date('h:i:s d/m/Y', time()));
+        return (date('h:i:s a d/m/Y', time()));
     }
     public function getLastTaskID(){
         //Gets last item from the DB to get the "task_id" value
