@@ -75,6 +75,8 @@ class Tasks extends Model
         if (isset($user_id)) {
             session_start();
             $_SESSION['user_id'] = $user_id;
+            $_SESSION['email'] = $user;
+            $_SESSION['password'] = $pwd;
             return true;
         } else {
             return false;
