@@ -22,9 +22,9 @@ if (isset($_POST["title"]) && isset($_POST["desc"]) && isset($_POST["status"])) 
     //"task_id" to set index in DB, ++task_id to set new "task_id" value
     $newData = array(
         $id => array(
-        "user_id" => 1,
-        "email" => "myemail@email.com",
-        "pwd" => "1234",
+        "user_id" => $model->get_user_id(),
+        "email" =>  $_SESSION['email'],
+        "pwd" => $_SESSION['password'],
         "name" => "UserName",
         "task_id" => ++$id,
         "title" => $_POST["title"],
