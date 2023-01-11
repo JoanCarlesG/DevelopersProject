@@ -16,17 +16,21 @@ class Tasks extends Model
         $this->_dbh = ROOT_PATH . '/web/' . $db . '.json';
     }
 
+    public function getDB(){
+        return $this->_dbh;
+    }
     // parse json db into an array
-    public function getData()
-    {
-        return (array) json_decode(file_get_contents($this->_dbh));
+    public function getData() {
+        return (array) json_decode(file_get_contents($this->_dbh, true));
     }
 
-    public function saveData($data)
-    {
-        //$encodedData = json_encode($data);
-        //return (array) file_put_contents($this->_dbh, $encodedData);
-        return (array) json_encode(file_put_contents($this->_dbh, $data));
+    public function addTask($newData) {
+        //DB decode to array, merge the 2 arrays, encode the new array, put contents in DB. Returns DB updated and decoded.
+        $dbData = $this->getData();
+        $mergedData = array_merge($dbData, $newData);
+        $encodedMerge = json_encode($mergedData, JSON_PRETTY_PRINT);
+        file_put_contents($this->_dbh, $encodedMerge);
+        return (array) json_decode(file_get_contents($this->_dbh));
     }
 
     public function listTasks($user_id)
@@ -41,10 +45,6 @@ class Tasks extends Model
         return $user_data;
     }
 
-    public function addTask()
-    {
-    }
-
     public function deleteTask()
     {
     }
@@ -53,6 +53,17 @@ class Tasks extends Model
     {
     }
 
+    public function setDate(){
+        //Sets timestamp in this format => Hour:Min:Sec Day/Month/Year
+        return (date('h:i:s a d/m/Y', time()));
+    }
+    public function getLastTaskID(){
+        //Gets last item from the DB to get the "task_id" value
+        $dbData = $this->getData();
+        $lastItem = end($dbData);
+        $lastItemId = $lastItem->{"task_id"};
+        return $lastItemId;
+    }
     public function validate_login()
     {
         $data = $this->getData();

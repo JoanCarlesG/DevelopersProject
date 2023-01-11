@@ -21,9 +21,10 @@ class ApplicationController extends Controller
 
     function savedAction($data = array())
     {
-        $model = new Tasks;
-        $table = $model->saveData($data);
-        var_dump($table);
+        $this->view;
+    }
+    function taskAction()
+    {
         $this->view;
     }
 
