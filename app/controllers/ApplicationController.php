@@ -45,7 +45,7 @@ class ApplicationController extends Controller
         $task_id = $_GET['task_id'];
         $model = new Tasks;
         
-        //update task if there are new data
+        //update task if there is new data
         if (empty($_POST)) {
             $this->view->_data = $model->getTask($task_id);
         } else {
