@@ -5,7 +5,7 @@
         "task_id": 1,
         "title": "TaskTitle 1",
         "desc": "Task description 1",
-        "status": "todo",
+        "status": "TO DO",
         "start_date": "",
         "mod_date": "",
         "end_date": ""
@@ -16,7 +16,7 @@
         "task_id": 2,
         "title": "TaskTitle 2",
         "desc": "Task description 2",
-        "status": "doing",
+        "status": "DOING",
         "start_date": "",
         "mod_date": "",
         "end_date": ""
