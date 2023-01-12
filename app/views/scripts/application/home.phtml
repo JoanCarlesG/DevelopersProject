@@ -1,13 +1,13 @@
-<div>
-    <?php
-    $data = array();
-    $data = $this->_data['_data'];
-    $i = 0;
-    ?>
-</div>
-<!--Follow link for animation in action https://play.tailwindcss.com/IpRdROqEoQ -->
+<?php
+$data = array();
+$data = $this->_data['data'];
+$i = 0;
+?>
 <div class="flex items-center justify-center px-16">
     <div class="relative w-full max-w-2xl">
+        <div class="m-8 relative space-y-4">
+            <?php include "filter.phtml" ?>
+        </div>
         <div class="m-8 relative space-y-4">
             <?php
             while ($i < count($data)) {
@@ -41,8 +41,10 @@
                             </div>
                             <div class="text-gray-400"><?php print($data[$i]->desc) ?></div>
                         </div>
-                        <div class="w-1/12 text-sm"><?php $task_id = $data[$i]->task_id;
-                        echo "<a href='update_task?task_id=" . $task_id . "'>Edit</a>"?></div>
+                        <div class="w-1/12 text-sm">
+                            <?php $task_id = $data[$i]->task_id;
+                            echo "<a href='update_task?task_id=" . $task_id . "'>Edit</a>" ?>
+                        </div>
                         <div class="w-1/12 text-sm">Delete</div>
                     </div>
                 </div>
