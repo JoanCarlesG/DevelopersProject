@@ -40,6 +40,7 @@ class ApplicationController extends Controller
 
     public function loginAction()
     {
+        $this->view->setLayout("login_layout");
         if (!empty($_POST)) {
             $model = new Tasks;
             if ($model->validate_login()) {
