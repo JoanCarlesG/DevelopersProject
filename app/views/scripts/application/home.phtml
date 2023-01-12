@@ -1,55 +1,10 @@
-<div>
-    <?php
-    $data = array();
-    $data = $this->_data['_data'];
-    $i = 0;
-    ?>
-</div>
-<!--Follow link for animation in action https://play.tailwindcss.com/IpRdROqEoQ -->
 <div class="flex items-center justify-center px-16">
     <div class="relative w-full max-w-2xl">
         <div class="m-8 relative space-y-4">
-            <?php
-            while ($i < count($data)) {
-                ?>
-                <div class="p-4 pt-3 bg-white rounded-lg items-center justify-between">
-                    <div>
-                        <?php if ($data[$i]->status == "TO DO") { ?>
-                            <span
-                                class="bg-blue-100 text-blue-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-blue-900 dark:text-blue-300">
-                                <?php print($data[$i]->status) ?>
-                            </span>
-                        <?php } else {
-                            if ($data[$i]->status == "DOING") { ?>
-                                <span
-                                    class="bg-yellow-100 text-yellow-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-yellow-900 dark:text-yellow-300">
-                                    <?php print($data[$i]->status) ?>
-                                </span>
-
-                            <?php } else { ?>
-                                <span
-                                    class="bg-green-100 text-green-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-green-900 dark:text-green-300">
-                                    <?php print($data[$i]->status) ?>
-                                </span>
-                            <?php }
-                        } ?>
-                    </div>
-                    <div class="flex justify-between items-center h-4 mt-2 space-x-3">
-                        <div class="flex w-10/12 text-sm space-x-3">
-                            <div class="font-bold">
-                                <?php print($data[$i]->title) ?>
-                            </div>
-                            <div class="text-gray-400"><?php print($data[$i]->desc) ?></div>
-                        </div>
-                        <div class="w-1/12 text-sm">Edit</div>
-                        <div class="w-1/12 text-sm">Delete</div>
-                    </div>
-                </div>
-                <?php
-                $i++;
-            }
-            ?>
+            <?php include "filter.phtml" ?>
+        </div>
+        <div class="m-8 relative space-y-4">
+            <?php include "list_tasks.phtml" ?>
         </div>
     </div>
-</div>
 </div>
