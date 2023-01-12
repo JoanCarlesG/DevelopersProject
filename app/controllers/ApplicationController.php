@@ -35,6 +35,7 @@ class ApplicationController extends Controller
     function taskAction()
     {
         $this->view;
+        // add --> header("Location: home"); 
     }
 
     public function loginAction()
@@ -53,7 +54,8 @@ class ApplicationController extends Controller
         if (!empty($_POST)) {
             $model = new Tasks;
             $data = $model->getData();
-            $model->deleteTask($data, $_POST); 
+            $model->deleteTask($data, $_POST);
+            header("Location: home"); 
         };
         
     }
