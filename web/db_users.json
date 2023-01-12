@@ -1,0 +1,14 @@
+[
+    {
+        "userId": 1,
+        "email": "myemail@email.com",
+        "pwd": "1234",
+        "name": "UserName"
+    },
+    {
+        "userId": 2,
+        "email": "seconduser@email.com",
+        "pwd": "1234",
+        "name": "SecondUser"
+    }
+]

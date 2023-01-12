@@ -30,12 +30,12 @@ while ($i < count($data)) {
                 </div>
                 <div class="text-gray-400"><?php print($data[$i]->desc) ?></div>
             </div>
-            <div class="w-1/12 text-sm"><?php $task_id = $data[$i]->task_id;
-                        echo "<a href='update_task?task_id=" . $task_id . "'>Edit</a>"?>
+            <div class="w-1/12 text-sm"><?php $taskId = $data[$i]->taskId;
+                        echo "<a href='update_task?taskId=" . $taskId . "'>Edit</a>"?>
             </div>
             <div class="w-1/12 text-sm">
                 <form action="./delete" method="post">
-                    <input type="hidden" name="task_id" value="<?= $data[$i]->task_id ?>">
+                    <input type="hidden" name="taskId" value="<?= $data[$i]->taskId ?>">
                     <button class="btn" style="border: 2px solid red; border-radius: 5px; padding: 2px; background-color: white; color: red;">Delete</button>
                 </form>
             </div>
