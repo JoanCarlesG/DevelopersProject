@@ -1,6 +1,6 @@
 TASK EDITOR
 <br><br>
-<form action="./saved" method="post">
+<form method="post">
     Title: <input type="text" name="title"><br><br>
     Description: <input type="text" name="desc"><br><br>
     Status: <select name="status">
@@ -12,11 +12,38 @@ TASK EDITOR
 </form>
 
 <?php
+
+
 if (isset($_POST["title"]) && isset($_POST["desc"]) && isset($_POST["status"])) {
-    $data[] = "";
-    $data["title"] = $_POST["title"];
-    $data["desc"] = $_POST["desc"];
-    $data["status"] = $_POST["status"];
+    
+    $model = new Tasks;
+    
+    $id = $model->getLastTaskID();
+    //"task_id" to set index in DB, ++task_id to set new "task_id" value
+    $newData = array(
+        $id => array(
+        "user_id" => $model->get_user_id(),
+        "email" =>  $_SESSION['email'],
+        "pwd" => $_SESSION['password'],
+        "name" => "UserName",
+        "task_id" => ++$id,
+        "title" => $_POST["title"],
+        "desc" => $_POST["desc"],
+        "status" => $_POST["status"],
+        "start_date" => $model->setDate(),
+        "mod_date" => "",
+        "end_date" => ""
+    ));
+
+    $model->addTask($newData);
+    echo "<br>"."Saved Data"."<br>";
+
+    //TESTING
+    $table = $model->getData();
+    echo "<pre>";
+    var_dump($table);
+    echo "</pre>";
+
 }
-//convertir json en array, o $data convertida a stdclass epr afegirla a l'array de la base de dades
+
 ?>
