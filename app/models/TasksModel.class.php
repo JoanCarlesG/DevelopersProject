@@ -16,15 +16,27 @@ class Tasks extends Model
         $this->_dbh = ROOT_PATH . '/web/' . $db . '.json';
     }
 
-    public function getDB(){
+    public function getDB()
+    {
         return $this->_dbh;
     }
     // parse json db into an array
-    public function getData() {
+    public function getData()
+    {
         return (array) json_decode(file_get_contents($this->_dbh, true));
     }
 
-    public function addTask($newData) {
+    public function setData($data)
+    {
+        //encode the new array
+        $encodedMerge = json_encode($data, JSON_PRETTY_PRINT);
+
+        //put content in DB
+        file_put_contents($this->_dbh, $encodedMerge);
+    }
+
+    public function addTask($newData)
+    {
         //DB decode to array, merge the 2 arrays, encode the new array, put contents in DB. Returns DB updated and decoded.
         $dbData = $this->getData();
         $mergedData = array_merge($dbData, $newData);
@@ -34,11 +46,23 @@ class Tasks extends Model
     }
 
     public function listTasks($user_id)
-    {   
+    {
         $data = $this->getData();
         $user_data = array();
-        foreach($data as $task) {
+        foreach ($data as $task) {
             if ($task->user_id == $user_id) {
+                array_push($user_data, $task);
+            }
+        }
+        return $user_data;
+    }
+
+    public function filter($user_id, $value)
+    {
+        $data = $this->listTasks($this->get_user_id());
+        $user_data = array();
+        foreach ($data as $task) {
+            if (($task->status == $value)) {
                 array_push($user_data, $task);
             }
         }
@@ -58,15 +82,44 @@ class Tasks extends Model
         return (array) json_decode(file_get_contents($this->_dbh));
     }
 
-    public function updateTask()
+    public function updateTask($data, $task_id)
     {
+        //modify task_id task on $data
+        foreach ($data as $task) {
+            if (($task->task_id == $task_id) && ($task->user_id == $_SESSION['user_id'])) {
+                $task->title = $_POST['title'];
+                $task->desc = $_POST['desc'];
+                if (($task->status != 'DONE') && ($_POST['status'] == 'DONE'))
+                    $task->end_date = $this->setDate();
+                $task->status = $_POST['status'];
+                if (($task->status != 'DONE') && isset($task->end_date)) 
+                    $task->end_date = "";
+                $task->mod_date = $this->setDate();
+            }
+        }
+
+        //save new data on db
+        $this->setData($data);
     }
 
-    public function setDate(){
+    public function getTask($task_id)
+    {
+        $data = $this->getData();
+        foreach ($data as $task) {
+            if ($task->task_id == $task_id)
+                return $task;
+        }
+        return null;
+    }
+
+    public function setDate()
+    {
         //Sets timestamp in this format => Hour:Min:Sec Day/Month/Year
         return (date('h:i:s a d/m/Y', time()));
     }
-    public function getLastTaskID(){
+
+    public function getLastTaskID()
+    {
         //Gets last item from the DB to get the "task_id" value
         $dbData = $this->getData();
         $lastItem = end($dbData);
@@ -105,7 +158,8 @@ class Tasks extends Model
         return null;
     }
 
-    public function get_user_id() {
+    public function get_user_id()
+    {
         return $_SESSION['user_id'];
     }
 
