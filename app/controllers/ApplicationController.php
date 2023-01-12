@@ -48,6 +48,15 @@ class ApplicationController extends Controller
             }
         }
     }
+    public function deleteAction()
+    {   
+        if (!empty($_POST)) {
+            $model = new Tasks;
+            $data = $model->getData();
+            $model->deleteTask($data, $_POST); 
+        };
+        
+    }
 
     public function updateTaskAction()
     {

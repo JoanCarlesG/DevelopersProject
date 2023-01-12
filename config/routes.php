@@ -14,5 +14,6 @@ $routes = array(
 	'/' => 'application#login',
 	'/home' => 'application#home',
 	'/task' => 'application#task',
+	'/delete' => 'application#delete',
 	'/update_task' => 'application#updateTask'
 );

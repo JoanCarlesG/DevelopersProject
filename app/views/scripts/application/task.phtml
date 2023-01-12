@@ -19,9 +19,9 @@ if (isset($_POST["title"]) && isset($_POST["desc"]) && isset($_POST["status"])) 
     $model = new Tasks;
     
     $id = $model->getLastTaskID();
-    //"task_id" to set index in DB, ++task_id to set new "task_id" value
+    //++task_id to set new "task_id" value
     $newData = array(
-        $id => array(
+        array_key_last($model->getData()) => array(
         "user_id" => $model->get_user_id(),
         "email" =>  $_SESSION['email'],
         "pwd" => $_SESSION['password'],
