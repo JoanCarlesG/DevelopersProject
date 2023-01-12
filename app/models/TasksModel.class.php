@@ -57,6 +57,18 @@ class Tasks extends Model
         return $user_data;
     }
 
+    public function filter($user_id, $value)
+    {
+        $data = $this->listTasks($this->get_user_id());
+        $user_data = array();
+        foreach ($data as $task) {
+            if (($task->status == $value)) {
+                array_push($user_data, $task);
+            }
+        }
+        return $user_data;
+    }
+
     public function deleteTask()
     {
     }
