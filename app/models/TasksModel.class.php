@@ -50,7 +50,7 @@ class Tasks extends Model
         $data = $this->getData();
         $user_data = array();
         foreach ($data as $task) {
-            if ($task->user_id == $user_id) {
+            if (($task->user_id == $user_id) &&(isset($task->task_id))) {
                 array_push($user_data, $task);
             }
         }

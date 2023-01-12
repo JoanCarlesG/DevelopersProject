@@ -13,7 +13,11 @@
         "user_id": 1,
         "email": "myemail@email.com",
         "pwd": "1234",
-        "name": "UserName"
+        "name": "UserName",
+        "title": "New Title",
+        "desc": "",
+        "status": "TO DO",
+        "mod_date": "11:56:22 am 12\/01\/2023"
     },
     {
         "user_id": 2,
@@ -43,13 +47,15 @@
     },
     {
         "user_id": 1,
+        "email": "myemail@email.com",
+        "pwd": "1234",
+        "name": "UserName",
         "task_id": 4,
         "title": "Task 3",
-        "desc": "bla",
-        "status": "todo",
-        "start_date": "10:46:20 am 12\/01\/2023",
-        "mod_date": "",
+        "desc": "This is a description",
+        "status": "TO DO",
+        "start_date": "12:12:20 pm 12\/01\/2023",
+        "mod_date": "12:15:11 pm 12\/01\/2023",
         "end_date": ""
     }
-
 ]
