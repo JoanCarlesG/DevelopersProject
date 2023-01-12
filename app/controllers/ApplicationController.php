@@ -40,6 +40,18 @@ class ApplicationController extends Controller
         }
     }
 
-
+    public function updateTaskAction()
+    {
+        $task_id = $_GET['task_id'];
+        $model = new Tasks;
+        
+        //update task if there is new data
+        if (empty($_POST)) {
+            $this->view->_data = $model->getTask($task_id);
+        } else {
+            $model->updateTask($model->getData(),$task_id);
+            header("Location: home");
+        }
+    }
 
 }
