@@ -5,6 +5,7 @@
  * Add general things in this controller.
  */
 include(ROOT_PATH . '/app/models/TasksModel.class.php');
+include(ROOT_PATH . '/app/models/UsersModel.class.php');
 
 class ApplicationController extends Controller
 {
@@ -15,23 +16,22 @@ class ApplicationController extends Controller
 
     public function listTasksAction()
     {
-
-        
         if(isset($_POST['filter']) && ($_POST['filter'] != 'All status')) {
-            $user_data = $this->filterAction();
+            $userData = $this->filterAction();
             $this->view->__set('filter', $_POST['filter']);
         } else {
             $model = new Tasks;
-            $user_data = $model->listTasks($model->get_user_id());
+            $userData = $model->listTasks($model->getUserId());
         }
 
-        $this->view->__set('data', $user_data);
+        $this->view->__set('data', $userData);
     }
 
     function savedAction($data = array())
     {
         $this->view;
     }
+
     function taskAction()
     {
         $this->view;
@@ -42,42 +42,43 @@ class ApplicationController extends Controller
     {
         $this->view->setLayout("login_layout");
         if (!empty($_POST)) {
-            $model = new Tasks;
-            if ($model->validate_login()) {
+            $model = new Users;
+            if ($model->validateLogin()) {
                 header("Location: home");
             } else {
                 echo '<div class="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-gray-800 dark:text-red-400" role="alert"><span class="font-medium">Danger alert!</span> Change a few things up and try submitting again.</div>';
             }
         }
     }
+    
     public function deleteAction()
     {   
         if (!empty($_POST)) {
             $model = new Tasks;
             $data = $model->getData();
             $model->deleteTask($data, $_POST);
-            header("Location: home"); 
+            header("Location: home");
         };
         
     }
 
     public function updateTaskAction()
     {
-        $task_id = $_GET['task_id'];
+        $taskId = $_GET['taskId'];
         $model = new Tasks;
         
         //update task if there is new data
         if (empty($_POST)) {
-            $this->view->_data = $model->getTask($task_id);
+            $this->view->__set('data',$model->getTask($taskId));
         } else {
-            $model->updateTask($model->getData(),$task_id);
+            $model->updateTask($model->getData(),$taskId);
             header("Location: home");
         }
     }
 
     public function filterAction() {
         $model = new Tasks;
-        return $model->filter($model->get_user_id(), $_POST['filter']);
+        return $model->filter($model->getUserId(), $_POST['filter']);
     }
 
 }
