@@ -45,8 +45,17 @@ class Tasks extends Model
         return $user_data;
     }
 
-    public function deleteTask()
+    public function deleteTask($data, $taskId)
     {
+        foreach($data as $key => $task){
+            if ($task->task_id == $taskId["task_id"]) {
+                unset($data[$key]);
+                array_values($data);
+            }
+        }
+        
+        file_put_contents($this->_dbh, json_encode($data, JSON_PRETTY_PRINT));
+        return (array) json_decode(file_get_contents($this->_dbh));
     }
 
     public function updateTask()

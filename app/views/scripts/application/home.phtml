@@ -3,6 +3,7 @@
     $data = array();
     $data = $this->_data['_data'];
     $i = 0;
+
     ?>
 </div>
 <!--Follow link for animation in action https://play.tailwindcss.com/IpRdROqEoQ -->
@@ -41,8 +42,15 @@
                             </div>
                             <div class="text-gray-400"><?php print($data[$i]->desc) ?></div>
                         </div>
-                        <div class="w-1/12 text-sm">Edit</div>
-                        <div class="w-1/12 text-sm">Delete</div>
+                        <div class="w-1/12 text-sm">
+                           <a href="./home">Edit</a>
+                        </div>
+                        <div class="w-1/12 text-sm">
+                            <form action="./delete" method="post">
+                                <input type="hidden" name="task_id" value="<?=$data[$i]->task_id?>">
+                                <button class="btn" style="border: 2px solid red; border-radius: 5px; padding: 2px; background-color: white; color: red;">Delete</button>
+                            </form>
+                        </div>
                     </div>
                 </div>
                 <?php
