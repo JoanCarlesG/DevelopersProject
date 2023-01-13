@@ -84,4 +84,37 @@ class Users extends Model
     {
         return $_SESSION['userId'];
     }
+
+    public function addUser()
+    {
+        if (isset($_POST["username"]) && isset($_POST["email"]) && isset($_POST["password"])) {
+            if (!($this->validateLogin())) {
+                $name = $_POST['username'];
+                $user = $_POST['email'];
+                $pwd = $_POST['password'];
+                $lastID = $this->getLastUserID();
+
+                $newData = array(
+                    array_key_last($this->getData()) => array(
+                        "userId" => ++$lastID,
+                        "email" =>  $user,
+                        "pwd" => $pwd,
+                        "name" => $name,
+                    )
+                );
+                $dbData = $this->getData();
+                $mergedData = array_merge($dbData, $newData);
+                $this->setData($mergedData);
+                return $this->getData();
+            }
+        }
+    }
+    public function getLastUserID()
+    {
+        //Gets last item from the DB to get the "userId" value
+        $dbData = $this->getData();
+        $lastItem = end($dbData);
+        $lastItemId = $lastItem->{"userId"};
+        return $lastItemId;
+    }
 }
