@@ -16,5 +16,7 @@ $routes = array(
 	'/task' => 'application#task',
 	'/saved' => 'application#saved',
 	'/delete' => 'application#delete',
-	'/update_task' => 'application#updateTask'
+	'/update_task' => 'application#updateTask',
+	'/register' => 'application#register'
+
 );

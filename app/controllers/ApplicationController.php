@@ -50,7 +50,7 @@ class ApplicationController extends Controller
 
     public function loginAction()
     {
-        $this->view->setLayout("login_layout");
+        $this->view->setLayout("loginLayout");
         if (!empty($_POST)) {
             $model = new Users;
             if ($model->validateLogin()) {
@@ -89,6 +89,17 @@ class ApplicationController extends Controller
     public function filterAction() {
         $model = new Tasks;
         return $model->filter($model->getUserId(), $_POST['filter']);
+    }
+
+    public function registerAction() {
+        $this->view->setLayout("loginLayout");
+        if (!empty($_POST)) {
+            $model = new Users;
+            if ($model->addUser($_POST)) {
+                $_POST = array();
+                header("Location: ./");
+            }
+        }
     }
 
 }

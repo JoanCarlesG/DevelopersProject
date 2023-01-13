@@ -48,9 +48,6 @@ class Tasks extends Model
             $newData = array(
                 array_key_last($this->getData()) => array(
                     "userId" => $this->getUserId(),
-                    "email" =>  $_SESSION['email'],
-                    "pwd" => $_SESSION['password'],
-                    "name" => "UserName",
                     "taskId" => ++$id,
                     "title" => $_POST["title"],
                     "desc" => $_POST["desc"],
