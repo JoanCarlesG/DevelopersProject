@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Tasks class for handling tasks data
  */
@@ -40,11 +41,30 @@ class Tasks extends Model
     public function addTask($newData)
     {
         //DB decode to array, merge the 2 arrays, encode the new array, put contents in DB. Returns DB updated and decoded.
-        $dbData = $this->getData();
-        $mergedData = array_merge($dbData, $newData);
-        $encodedMerge = json_encode($mergedData, JSON_PRETTY_PRINT);
-        file_put_contents($this->_dbh, $encodedMerge);
-        return (array) json_decode(file_get_contents($this->_dbh));
+        if (isset($_POST["title"]) && isset($_POST["desc"]) && isset($_POST["status"])) {
+
+            $id = $this->getLastTaskID();
+            //++task_id to set new "task_id" value
+            $newData = array(
+                array_key_last($this->getData()) => array(
+                    "userId" => $this->getUserId(),
+                    "email" =>  $_SESSION['email'],
+                    "pwd" => $_SESSION['password'],
+                    "name" => "UserName",
+                    "taskId" => ++$id,
+                    "title" => $_POST["title"],
+                    "desc" => $_POST["desc"],
+                    "status" => $_POST["status"],
+                    "startDate" => $this->setDate(),
+                    "modDate" => "",
+                    "endDate" => ""
+                )
+            );
+            $dbData = $this->getData();
+            $mergedData = array_merge($dbData, $newData);
+            $this->setData($mergedData);
+            return $this->getData();
+        }
     }
 
     // list all tasks from a user
@@ -80,9 +100,8 @@ class Tasks extends Model
                 array_values($data);
             }
         }
-
-        file_put_contents($this->_dbh, json_encode($data, JSON_PRETTY_PRINT));
-        return (array) json_decode(file_get_contents($this->_dbh));
+        $this->setData($data);
+        return $this->getData();
     }
 
     public function updateTask($data, $taskId)

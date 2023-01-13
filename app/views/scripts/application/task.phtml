@@ -1,6 +1,6 @@
 TASK EDITOR
 <br><br>
-<form method="post">
+<form action="./saved" method="post">
     Title: <input type="text" name="title"><br><br>
     Description: <input type="text" name="desc"><br><br>
     Status: <select name="status">
@@ -11,39 +11,3 @@ TASK EDITOR
     <input type="submit">
 </form>
 
-<?php
-
-
-if (isset($_POST["title"]) && isset($_POST["desc"]) && isset($_POST["status"])) {
-    
-    $model = new Tasks;
-    
-    $id = $model->getLastTaskID();
-    //++task_id to set new "task_id" value
-    $newData = array(
-        array_key_last($model->getData()) => array(
-        "userId" => $model->getUserId(),
-        "email" =>  $_SESSION['email'],
-        "pwd" => $_SESSION['password'],
-        "name" => "UserName",
-        "taskId" => ++$id,
-        "title" => $_POST["title"],
-        "desc" => $_POST["desc"],
-        "status" => $_POST["status"],
-        "startDate" => $model->setDate(),
-        "modDate" => "",
-        "endDate" => ""
-    ));
-
-    $model->addTask($newData);
-    echo "<br>"."Saved Data"."<br>";
-
-    //TESTING
-    $table = $model->getData();
-    echo "<pre>";
-    var_dump($table);
-    echo "</pre>";
-
-}
-
-?>
