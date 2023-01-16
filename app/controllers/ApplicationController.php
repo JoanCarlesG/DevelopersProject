@@ -14,22 +14,51 @@ class ApplicationController extends Controller
         $this->listTasksAction();
     }
 
+    /**
+     * Lists tasks from user's session
+     */
     public function listTasksAction()
     {
-        if (isset($_POST['filter']) && ($_POST['filter'] != 'All status')) {
-            $userData = $this->filterAction();
-            $this->view->__set('filter', $_POST['filter']);
-        } else {
-            $model = new Tasks;
-            $userData = $model->listTasks($model->getUserId());
+        //List all user session tasks
+        $model = new Tasks;
+        $userData = array();
+        $userData = $model->listTasks();
+
+        //Apply filter and search if set
+        if (isset($_GET['filter'])) {
+            $userData = $this->filterAction($userData);
         }
 
         if (isset($_POST['search'])) {
-            $this->searchAction();
-            $_POST = array();
-        } else {
-            $this->view->__set('data', $userData);
+            $userData = $this->searchAction($userData);
+            //Clean $_POST
+             $_POST = array();
         }
+
+        //Save data in view
+        $this->view->__set('data', $userData);
+    }
+
+    public function filterAction($userData){
+        if (isset($_GET['filter']) && ($_GET['filter'] != 'All status')) {
+            $model = new Tasks;
+            $userData = $model->statusFilter($userData, $_GET['filter']);
+            $this->view->__set('filter', $_GET['filter']);
+        }
+
+        return $userData;
+    }
+
+    public function searchAction($userData)
+    {
+        if (isset($_POST['search']) && $_POST['search'] != "") {
+            $search = $_POST['search'];
+            $model = new Tasks;
+            $userData = $model->search($userData, $search);
+            $this->view->__set('search', $_POST['search']);
+        }
+        
+        return $userData;
     }
 
     function savedAction($data = array())
@@ -51,29 +80,6 @@ class ApplicationController extends Controller
         $this->view;
     }
 
-    public function loginAction()
-    {
-        $this->view->setLayout("loginLayout");
-        if (!empty($_POST)) {
-            $model = new Users;
-            if ($model->validateLogin()) {
-                header("Location: home");
-            } else {
-                echo '<div class="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-gray-800 dark:text-red-400" role="alert"><span class="font-medium">Danger alert!</span> Change a few things up and try submitting again.</div>';
-            }
-        }
-    }
-
-    public function deleteAction()
-    {
-        if (!empty($_POST)) {
-            $model = new Tasks;
-            $data = $model->getData();
-            $model->deleteTask($data, $_POST);
-            header("Location: home");
-        };
-    }
-
     public function updateTaskAction()
     {
         $taskId = $_GET['taskId'];
@@ -88,10 +94,28 @@ class ApplicationController extends Controller
         }
     }
 
-    public function filterAction()
+    public function deleteAction()
     {
-        $model = new Tasks;
-        return $model->filter($model->getUserId(), $_POST['filter']);
+        if (!empty($_GET)) {
+            $model = new Tasks;
+            $data = $model->getData();
+            $model->deleteTask($data, $_GET['taskId']);
+            header("Location: home");
+        }
+        ;
+    }
+
+    public function loginAction()
+    {
+        $this->view->setLayout("loginLayout");
+        if (!empty($_POST)) {
+            $model = new Users;
+            if ($model->validateLogin()) {
+                header("Location: home");
+            } else {
+                echo '<div class="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-gray-800 dark:text-red-400" role="alert"><span class="font-medium">Danger alert!</span> Change a few things up and try submitting again.</div>';
+            }
+        }
     }
 
     public function registerAction()
@@ -104,17 +128,5 @@ class ApplicationController extends Controller
                 header("Location: ./");
             }
         }
-    }
-
-    public function searchAction()
-    {
-        if (isset($this->view->_data['search'])) {
-            $search = $this->view->_data['search'];
-        } else{
-            $search = "";
-        }
-        $model = new Tasks;
-        $searchedData = $model->search($search);
-        return $this->view->__set('data', $model->showSearch($searchedData));
     }
 }
