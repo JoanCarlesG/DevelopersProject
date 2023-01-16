@@ -53,10 +53,10 @@ class ApplicationController extends Controller
     
     public function deleteAction()
     {   
-        if (!empty($_POST)) {
+        if (!empty($_GET)) {
             $model = new Tasks;
             $data = $model->getData();
-            $model->deleteTask($data, $_POST);
+            $model->deleteTask($data, $_GET['taskId']);
             header("Location: home");
         };
         

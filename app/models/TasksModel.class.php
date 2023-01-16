@@ -75,7 +75,7 @@ class Tasks extends Model
     public function deleteTask($data, $taskId)
     {
         foreach ($data as $key => $task) {
-            if ($task->taskId == $taskId["taskId"]) {
+            if ($task->taskId == $taskId) {
                 unset($data[$key]);
                 array_values($data);
             }
