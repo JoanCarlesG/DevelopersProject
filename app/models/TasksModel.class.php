@@ -150,4 +150,36 @@ class Tasks extends Model
     {
         return $_SESSION['userId'];
     }
+
+    public function search($value){
+        
+        if (!isset($_POST)) {
+            $value = null;
+        } else {
+            $value = $_POST;
+        }
+        $showndata = $this->filterText($value['search']);
+        return $showndata;
+    }
+
+    public function filterText($value)
+    {
+        $data = $this->listTasks($this->getUserId());
+        $userData = array();
+        foreach ($data as $task) {
+            if ((str_contains(strtolower($task->title), strtolower($value))) || (str_contains(strtolower($task->desc), strtolower($value)))) {
+                array_push($userData, $task);
+            }
+        }
+        return $userData;
+    }
+    public function showSearch($searchedData){
+        $shownData = array();
+        foreach ($searchedData as $task) {
+            if (($task->userId == $this->getUserId()) && (isset($task->taskId))) {
+                array_push($shownData, $task);
+            }
+        }
+        return $shownData;
+    }
 }
