@@ -29,18 +29,28 @@ class ApplicationController extends Controller
 
     function savedAction($data = array())
     {
+        if (!empty($_POST)) {
+            $model = new Tasks;
+            $model->addTask($data);
+            echo '<div class="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-gray-800 dark:text-red-400" role="alert"><span class="font-medium">Danger alert!</span> Saved Data.</div>';
+            header("Location: home");
+
+        } else {
+            echo '<div class="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-gray-800 dark:text-red-400" role="alert"><span class="font-medium">Danger alert!</span> The fields are empty.</div>';
+            header("Location: task");
+            
+        }
         $this->view;
     }
 
     function taskAction()
     {
-        $this->view;
-        // add --> header("Location: home"); 
+        $this->view; 
     }
 
     public function loginAction()
     {
-        $this->view->setLayout("login_layout");
+        $this->view->setLayout("loginLayout");
         if (!empty($_POST)) {
             $model = new Users;
             if ($model->validateLogin()) {
@@ -79,6 +89,17 @@ class ApplicationController extends Controller
     public function filterAction() {
         $model = new Tasks;
         return $model->filter($model->getUserId(), $_POST['filter']);
+    }
+
+    public function registerAction() {
+        $this->view->setLayout("loginLayout");
+        if (!empty($_POST)) {
+            $model = new Users;
+            if ($model->addUser($_POST)) {
+                $_POST = array();
+                header("Location: ./");
+            }
+        }
     }
 
 }

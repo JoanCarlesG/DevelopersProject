@@ -1,4 +1,4 @@
-<!-- HOME LAYOUT-->
+<!-- LOGIN LAYOUT-->
 
 <!-- HTML HEAD-->
 <?php include "partials/htmlHead.php"?>
@@ -14,27 +14,23 @@
             <div class="flex-shrink-0">
               <img class="h-8 w-8" src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/logo.svg" alt="Your Company">
             </div>
+            <div class="mx-auto max-w-7xl py-6 px-4 sm:px-6 lg:px-8">
+              <h1 class="text-3xl font-bold tracking-tight text-gray-300">TASK APP</h1>
+            </div>
             <div class="hidden md:block">
-
               <div class="ml-10 flex items-baseline space-x-4">
-                <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-                <a href="./home" class="bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium" aria-current="page">Home</a>
-
-                <a href="./task" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">New Task</a>
-
               </div>
             </div>
           </div>
           <div class="hidden md:block">
+
             <div class="ml-4 flex items-center md:ml-6">
-              
-              <button type="button" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
-                <span class="sr-only">Sign out</span>
-                <a href="./">Sign out</a>
-              </button>
               <div class="relative ml-3">
                 <div>
-                  <img class="h-8 w-8 rounded-full" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt="Avatar">
+                  <button type="button" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
+                    <span class="sr-only">Sign in</span>
+                    <a href="./">Sign in</a>
+                  </button>
                 </div>
               </div>
             </div>
@@ -42,8 +38,7 @@
 
     <!-- RESPONSIVE MOBILE -->
     <?php include "partials/mobile.php"?>
-    <!-- HEADER -->
-    <?php include "partials/header.php"?>
+    <!-- INCLUDE HEADER IF NEEDED -->
     <main>
       <div class="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
         <?php echo $this->content(); ?>

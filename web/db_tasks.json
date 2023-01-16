@@ -1,9 +1,6 @@
 [
     {
         "userId": 1,
-        "email": "myemail@email.com",
-        "pwd": "1234",
-        "name": "UserName",
         "taskId": 1,
         "title": "Title 1",
         "desc": "Desc 1",
@@ -14,9 +11,6 @@
     },
     {
         "userId": 2,
-        "email": "seconduser@email.com",
-        "pwd": "1234",
-        "name": "UserName",
         "taskId": 1,
         "title": "Task 1 User 2",
         "desc": "Desc 1 User 2",
@@ -27,9 +21,6 @@
     },
     {
         "userId": 1,
-        "email": "myemail@email.com",
-        "pwd": "1234",
-        "name": "UserName",
         "taskId": 2,
         "title": "Task 3",
         "desc": "Desc 3",
