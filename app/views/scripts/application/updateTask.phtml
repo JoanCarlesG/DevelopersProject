@@ -1,14 +1,6 @@
 <?php
 $task = $this->_data['data'];
+$formtitle = "Update Task";
+$button = "Update task";
+include "taskform.phtml";
 ?>
-
-<form method="post">
-    Title: <input type="text" name="title" value="<?php echo $task->title;?>"><br><br>
-    Description: <input type="text" name="desc" value="<?php echo $task->desc;?>"><br><br>
-    Status: <select name="status" id="status">
-        <option value="TO DO" <?php echo ($task->status=='TO DO')? 'selected' : '';?>> TO DO</option>
-        <option value="DOING" <?php echo $task->status=='DOING'? 'selected' : '';?>> DOING</option>
-        <option value="DONE" <?php echo $task->status=='DONE'? 'selected' : '';?>> DONE</option>
-    </select><br><br>
-    <input type="submit" value="Update">
-</form>

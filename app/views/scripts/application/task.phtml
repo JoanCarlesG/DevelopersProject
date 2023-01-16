@@ -1,13 +1,6 @@
-TASK EDITOR
-<br><br>
-<form action="./saved" method="post">
-    Title: <input type="text" name="title"><br><br>
-    Description: <input type="text" name="desc"><br><br>
-    Status: <select name="status">
-        <option value="TO DO">TO DO</option>
-        <option value="DOING">DOING</option>
-        <option value="DONE">DONE</option>
-    </select><br><br>
-    <input type="submit">
-</form>
-
+<?php 
+$formtitle = "New Task";
+$task = array();
+$button = "Create new task";
+include "taskform.phtml";
+?>
