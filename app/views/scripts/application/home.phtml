@@ -1,11 +1,16 @@
 <div class="flex items-center justify-center px-16">
     <div class="relative w-full max-w-2xl">
-        <div class="" style="display: flex; justify-content: space-between;">
+        <div class="" style="display: flex; justify-content: space-between; flex-direction:column;">
             <div class="m-8 relative space-y-4">
-                <?php include "filter.phtml" ?>
+                <?php include "search.phtml" ?>
             </div>
-            <div class="m-8 relative space-y-4">
-                <?php include "newTaskButton.phtml" ?>
+            <div class="m-2" style="display: flex; justify-content: space-between;">
+                <div class="m-2 relative space-y-4">
+                    <?php include "filter.phtml" ?>
+                </div>
+                <div class="m-2 relative space-y-4">
+                    <?php include "newTaskButton.phtml" ?>
+                </div>
             </div>
         </div>
         <div class="m-8 relative space-y-4">
