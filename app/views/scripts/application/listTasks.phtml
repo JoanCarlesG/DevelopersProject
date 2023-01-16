@@ -27,11 +27,11 @@ while ($i < count($data)) {
             } ?>
         </div>
         <div class="flex items-center mt-2 space-x-3">
-            <div class="h-4 flex w-10/12 text-sm space-x-3 overflow-hidden">
-                <div class="h-4 font-bold flex-none">
+            <div class="h-5 flex w-10/12 text-sm space-x-3 overflow-hidden">
+                <div class="h-5 font-bold flex-none">
                     <?php print($data[$i]->title) ?>
                 </div>
-                <div class="h-4 text-gray-400"><?php print($data[$i]->desc) ?></div>
+                <div class="h-5 text-gray-400"><?php print($data[$i]->desc) ?></div>
             </div>
             <?php $taskId = $data[$i]->taskId ?>
             <div class="text-sm text-right font-medium text-blue-400 leading-none">

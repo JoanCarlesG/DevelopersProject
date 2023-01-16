@@ -64,41 +64,71 @@ class Tasks extends Model
         }
     }
 
-    // list all tasks from a user
-    public function listTasks($userId)
+    /**
+     * List all tasks of a user
+     * @return array array of tasks
+     */
+    public function listTasks()
     {
         $data = $this->getData();
         $userData = array();
         foreach ($data as $task) {
-            if (($task->userId == $userId) && (isset($task->taskId))) {
+            if (($task->userId == $this->getUserId()) && (isset($task->taskId))) {
                 array_push($userData, $task);
             }
         }
+
         return $userData;
     }
 
-    public function filter($userId, $value)
+    /**
+     * It gets the list of all tasks for a user and returns only the ones that match with
+     * the selected status by user.
+     * @param array list of all tasks for a user
+     * @param mixed $value status value to filter
+     * @return array list of all tasks for a user filtered by status
+     */
+    public function statusFilter($userData, $value)
     {
-        $data = $this->listTasks($this->getUserId());
-        $userData = array();
-        foreach ($data as $task) {
+        $filteredUserData = array();
+        foreach ($userData as $task) {
             if (($task->status == $value)) {
-                array_push($userData, $task);
+                array_push($filteredUserData, $task);
             }
         }
-        return $userData;
+
+        return $filteredUserData;
     }
 
-    public function deleteTask($data, $taskId)
+    public function search($userData, $value){
+        
+        if (!isset($_POST)) {
+            $value = null;
+        } else {
+            $value = $_POST;
+        }
+        $showndata = $this->filterText($userData, $value['search']);
+        return $showndata;
+    }
+
+    public function filterText($userData, $value)
     {
-        foreach ($data as $key => $task) {
-            if ($task->taskId == $taskId) {
-                unset($data[$key]);
-                array_values($data);
+        $newUserData = array();
+        foreach ($userData as $task) {
+            if ((str_contains(strtolower($task->title), strtolower($value))) || (str_contains(strtolower($task->desc), strtolower($value)))) {
+                array_push($newUserData, $task);
             }
         }
-        $this->setData($data);
-        return $this->getData();
+        return $newUserData;
+    }
+    public function showSearch($searchedData){
+        $shownData = array();
+        foreach ($searchedData as $task) {
+            if (($task->userId == $this->getUserId()) && (isset($task->taskId))) {
+                array_push($shownData, $task);
+            }
+        }
+        return $shownData;
     }
 
     public function updateTask($data, $taskId)
@@ -119,6 +149,18 @@ class Tasks extends Model
 
         //save new data on db
         $this->setData($data);
+    }
+
+    public function deleteTask($data, $taskId)
+    {
+        foreach ($data as $key => $task) {
+            if ($task->taskId == $taskId) {
+                unset($data[$key]);
+                array_values($data);
+            }
+        }
+        $this->setData($data);
+        return $this->getData();
     }
 
     public function getTask($taskId)
@@ -149,37 +191,5 @@ class Tasks extends Model
     public function getUserId()
     {
         return $_SESSION['userId'];
-    }
-
-    public function search($value){
-        
-        if (!isset($_POST)) {
-            $value = null;
-        } else {
-            $value = $_POST;
-        }
-        $showndata = $this->filterText($value['search']);
-        return $showndata;
-    }
-
-    public function filterText($value)
-    {
-        $data = $this->listTasks($this->getUserId());
-        $userData = array();
-        foreach ($data as $task) {
-            if ((str_contains(strtolower($task->title), strtolower($value))) || (str_contains(strtolower($task->desc), strtolower($value)))) {
-                array_push($userData, $task);
-            }
-        }
-        return $userData;
-    }
-    public function showSearch($searchedData){
-        $shownData = array();
-        foreach ($searchedData as $task) {
-            if (($task->userId == $this->getUserId()) && (isset($task->taskId))) {
-                array_push($shownData, $task);
-            }
-        }
-        return $shownData;
     }
 }
