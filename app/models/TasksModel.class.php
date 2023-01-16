@@ -102,10 +102,10 @@ class Tasks extends Model
 
     public function search($userData, $value){
         
-        if (!isset($_POST)) {
+        if (!isset($_GET)) {
             $value = null;
         } else {
-            $value = $_POST;
+            $value = $_GET;
         }
         $showndata = $this->filterText($userData, $value['search']);
         return $showndata;

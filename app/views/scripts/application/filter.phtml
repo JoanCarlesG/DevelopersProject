@@ -5,12 +5,9 @@
 }
 ?>
 
-<form method='get'>
-    <select name="filter">
-        <option value="All status">All status</option>
-        <option value="TO DO" <?php echo ($filter == 'TO DO') ? 'selected' : ''; ?>>TO DO</option>
-        <option value="DOING" <?php echo ($filter == 'DOING') ? 'selected' : ''; ?>>DOING</option>
-        <option value="DONE" <?php echo ($filter == 'DONE') ? 'selected' : ''; ?>>DONE</option>
-    </select>
-    <input type="submit" value="Search">
-</form>
+<select name="filter" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+    <option value="All status">All status</option>
+    <option value="TO DO" <?php echo ($filter == 'TO DO') ? 'selected' : ''; ?>>TO DO</option>
+    <option value="DOING" <?php echo ($filter == 'DOING') ? 'selected' : ''; ?>>DOING</option>
+    <option value="DONE" <?php echo ($filter == 'DONE') ? 'selected' : ''; ?>>DONE</option>
+</select>
