@@ -29,10 +29,10 @@ class ApplicationController extends Controller
             $userData = $this->filterAction($userData);
         }
 
-        if (isset($_POST['search'])) {
+        if (isset($_GET['search'])) {
             $userData = $this->searchAction($userData);
             //Clean $_POST
-             $_POST = array();
+             $_GET = array();
         }
 
         //Save data in view
@@ -51,11 +51,11 @@ class ApplicationController extends Controller
 
     public function searchAction($userData)
     {
-        if (isset($_POST['search']) && $_POST['search'] != "") {
-            $search = $_POST['search'];
+        if (isset($_GET['search']) && $_GET['search'] != "") {
+            $search = $_GET['search'];
             $model = new Tasks;
             $userData = $model->search($userData, $search);
-            $this->view->__set('search', $_POST['search']);
+            $this->view->__set('search', $_GET['search']);
         }
         
         return $userData;

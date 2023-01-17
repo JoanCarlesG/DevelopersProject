@@ -40,13 +40,6 @@ while ($i < count($data)) {
             <div onclick="confirmDelete()" class="text-sm items-center text-right text-red-400 font-medium leading-none">
                 <?php echo "<a class='flex' href='delete?taskId=" . $taskId . "'><i class='fa-solid fa-trash'></i>&nbspDelete</a>" ?>
             </div>
-            <!--<div class="w-1/12 text-sm">
-                <form action="./delete" method="post">
-                    <input type="hidden" name="taskId" value="<?= $data[$i]->taskId ?>">
-                    <button class="btn"
-                        style="border: 2px solid red; border-radius: 5px; padding: 2px; background-color: white; color: red;">Delete</button>
-                </form>
-            </div>-->
         </div>
     </div>
     <?php
