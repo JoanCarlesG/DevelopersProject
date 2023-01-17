@@ -1,9 +1,10 @@
 <!-- HOME LAYOUT-->
 
 <!-- HTML HEAD-->
-<?php include "partials/htmlHead.php"?>
+<?php include "partials/htmlHead.php" ?>
 
 <!-- NAV BAR-->
+
 <body class="h-full">
 
   <div class="min-h-full">
@@ -11,24 +12,28 @@
       <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div class="flex h-16 items-center justify-between">
           <div class="flex items-center">
-            <div class="flex-shrink-0">
-              <img class="h-8 w-8" src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/logo.svg" alt="Your Company">
-            </div>
+            <a href="./home" class="flex-shrink-0">
+              <img class="h-11 w-11" src="./images/logo.png" alt="TaskApp">
+            </a>
             <div class="hidden md:block">
 
-              <div class="ml-10 flex items-baseline space-x-4">
+              <div class="ml-7 flex items-baseline space-x-4">
                 <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-                <a href="./home" class="bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium" aria-current="page">Home</a>
+                <a href="./home" class="text-white text-3xl font-medium" style="font-family:'Sofia Sans', sans-serif"
+                  aria-current="page">TaskApp</a>
 
-                <a href="./task" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">New Task</a>
+                <a href="./task"
+                  class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">New
+                  Task</a>
 
               </div>
             </div>
           </div>
           <div class="hidden md:block">
             <div class="ml-4 flex items-center md:ml-6">
-              
-              <button type="button" class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
+
+              <button type="button"
+                class="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium">
                 <span class="sr-only">Sign out</span>
                 <a href="./">Sign out</a>
               </button>
@@ -40,16 +45,16 @@
             </div>
           </div>
 
-    <!-- RESPONSIVE MOBILE -->
-    <?php include "partials/mobile.php"?>
-    <!-- HEADER -->
-    <?php include "partials/header.php"?>
-    <main>
-      <div class="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
-        <?php echo $this->content(); ?>
-      </div>
-    </main>
-  </div>
+          <!-- RESPONSIVE MOBILE -->
+          <?php include "partials/mobile.php" ?>
+          <!-- HEADER -->
+          <?php include "partials/header.php" ?>
+          <main>
+            <div class="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">
+              <?php echo $this->content(); ?>
+            </div>
+          </main>
+        </div>
 
 </body>
 
