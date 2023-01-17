@@ -49,12 +49,14 @@ class Users extends Model
         $pwd = $_POST['password'];
 
         $userId = $this->validateUser($data, $user, $pwd);
+        $userName = $this->getUserName($data, $user, $pwd);
 
         if (isset($userId)) {
             session_start();
             $_SESSION['userId'] = $userId;
             $_SESSION['email'] = $user;
             $_SESSION['password'] = $pwd;
+            $_SESSION['name'] = $userName;
             return true;
         } else {
             return false;
@@ -74,6 +76,17 @@ class Users extends Model
             if (($dbUser->email == $user) || ($dbUser->name == $user)) {
                 if ($dbUser->pwd == $pwd) {
                     return $dbUser->userId;
+                }
+            }
+        }
+        return null;
+    }
+    public function getUserName($data, $user, $pwd)
+    {
+        foreach ($data as $dbUser) {
+            if (($dbUser->email == $user) || ($dbUser->name == $user)) {
+                if ($dbUser->pwd == $pwd) {
+                    return $dbUser->name;
                 }
             }
         }
