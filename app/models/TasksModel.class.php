@@ -3,7 +3,6 @@
 /**
  * Tasks class for handling tasks data
  */
-include ('Tasks.intarface.php');
 class Tasks extends Model implements TasksInterface
 {
     public function __construct()

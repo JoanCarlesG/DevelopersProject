@@ -3,7 +3,7 @@
 /**
  * Users class for handling users data
  */
-class Users extends Model
+class Users extends Model implements UsersInterface
 {
     public function __construct()
     {

@@ -15,4 +15,3 @@ interface TasksInterface
     public function deleteTask($data,$taskId);
     
 }
-?>
