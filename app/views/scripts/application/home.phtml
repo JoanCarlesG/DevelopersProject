@@ -1,10 +1,15 @@
 <div class="flex items-center justify-center px-16">
     <div class="relative w-full max-w-2xl">
-        <div class="m-8 relative space-y-4">
-            <?php include "filter.phtml" ?>
+        <div class="mx-8 my-4 relative">
+            <div class="">
+                <?php include "searchForm.phtml" ?>
+            </div>
+            <div class="m-1.5">
+                <?php include "newTaskButton.phtml" ?>
+            </div>
         </div>
-        <div class="m-8 relative space-y-4">
-            <?php include "list_tasks.phtml" ?>
+        <div class="mx-8 my-4 relative space-y-4">
+            <?php include "listTasks.phtml" ?>
         </div>
     </div>
 </div>

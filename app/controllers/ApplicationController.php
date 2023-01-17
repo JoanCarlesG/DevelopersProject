@@ -5,6 +5,7 @@
  * Add general things in this controller.
  */
 include(ROOT_PATH . '/app/models/TasksModel.class.php');
+include(ROOT_PATH . '/app/models/UsersModel.class.php');
 
 class ApplicationController extends Controller
 {
@@ -13,71 +14,119 @@ class ApplicationController extends Controller
         $this->listTasksAction();
     }
 
+    /**
+     * Lists tasks from user's session
+     */
     public function listTasksAction()
     {
+        //List all user session tasks
+        $model = new Tasks;
+        $userData = array();
+        $userData = $model->listTasks();
 
-        
-        if(isset($_POST['filter']) && ($_POST['filter'] != 'All status')) {
-            $user_data = $this->filterAction();
-            $this->view->__set('filter', $_POST['filter']);
-        } else {
-            $model = new Tasks;
-            $user_data = $model->listTasks($model->get_user_id());
+        //Apply filter and search if set
+        if (isset($_GET['filter'])) {
+            $userData = $this->filterAction($userData);
         }
 
-        $this->view->__set('data', $user_data);
+        if (isset($_GET['search'])) {
+            $userData = $this->searchAction($userData);
+            //Clean $_POST
+             $_GET = array();
+        }
+
+        //Save data in view
+        $this->view->__set('data', $userData);
+    }
+
+    public function filterAction($userData){
+        if (isset($_GET['filter']) && ($_GET['filter'] != 'All status')) {
+            $model = new Tasks;
+            $userData = $model->statusFilter($userData, $_GET['filter']);
+            $this->view->__set('filter', $_GET['filter']);
+        }
+
+        return $userData;
+    }
+
+    public function searchAction($userData)
+    {
+        if (isset($_GET['search']) && $_GET['search'] != "") {
+            $search = $_GET['search'];
+            $model = new Tasks;
+            $userData = $model->search($userData, $search);
+            $this->view->__set('search', $_GET['search']);
+        }
+        
+        return $userData;
     }
 
     function savedAction($data = array())
     {
+        if (!empty($_POST)) {
+            $model = new Tasks;
+            $model->addTask($data);
+            echo '<div class="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-gray-800 dark:text-red-400" role="alert"><span class="font-medium">Danger alert!</span> Saved Data.</div>';
+            header("Location: home");
+        } else {
+            echo '<div class="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-gray-800 dark:text-red-400" role="alert"><span class="font-medium">Danger alert!</span> The fields are empty.</div>';
+            header("Location: task");
+        }
         $this->view;
     }
+
     function taskAction()
     {
         $this->view;
-        // add --> header("Location: home"); 
+    }
+
+    public function updateTaskAction()
+    {
+        $taskId = $_GET['taskId'];
+        $model = new Tasks;
+
+        //update task if there is new data
+        if (empty($_POST)) {
+            $this->view->__set('data', $model->getTask($taskId));
+        } else {
+            $model->updateTask($model->getData(), $taskId);
+            header("Location: home");
+        }
+    }
+
+    public function deleteAction()
+    {
+        if (!empty($_GET)) {
+            $model = new Tasks;
+            $data = $model->getData();
+            $model->deleteTask($data, $_GET['taskId']);
+            header("Location: home");
+        }
+        ;
     }
 
     public function loginAction()
     {
-        $this->view->setLayout("login_layout");
+        $this->view->setLayout("loginLayout");
         if (!empty($_POST)) {
-            $model = new Tasks;
-            if ($model->validate_login()) {
+            $model = new Users;
+            if ($model->validateLogin()) {
                 header("Location: home");
             } else {
                 echo '<div class="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-gray-800 dark:text-red-400" role="alert"><span class="font-medium">Danger alert!</span> Change a few things up and try submitting again.</div>';
             }
         }
     }
-    public function deleteAction()
-    {   
-        if (!empty($_POST)) {
-            $model = new Tasks;
-            $data = $model->getData();
-            $model->deleteTask($data, $_POST);
-            header("Location: home"); 
-        };
-        
-    }
 
-    public function updateTaskAction()
+    public function registerAction()
     {
-        $task_id = $_GET['task_id'];
-        $model = new Tasks;
-        
-        //update task if there is new data
-        if (empty($_POST)) {
-            $this->view->_data = $model->getTask($task_id);
-        } else {
-            $model->updateTask($model->getData(),$task_id);
-            header("Location: home");
+        $this->view->setLayout("loginLayout");
+        if (!empty($_POST)) {
+            $model = new Users;
+            if ($model->addUser($_POST)) {
+                $_POST = array();
+                header("Location: ./");
+            }
         }
     }
-
-    public function filterAction() {
-        $model = new Tasks;
-        return $model->filter($model->get_user_id(), $_POST['filter']);
-    }
-
 }

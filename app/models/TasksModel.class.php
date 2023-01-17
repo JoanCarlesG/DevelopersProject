@@ -1,31 +1,34 @@
 <?php
 
 /**
- * Base model for the application.
- * Add general things in this model.
+ * Tasks class for handling tasks data
  */
 class Tasks extends Model
 {
     public function __construct()
     {
         // parse the settings file
-        $settings = parse_ini_file(ROOT_PATH . '/config/settings.ini', true);
-
-
-        $db = $settings['database']['dbname'];
-        $this->_dbh = ROOT_PATH . '/web/' . $db . '.json';
+        $this->_dbh = ROOT_PATH . '/web/' . 'db_tasks.json';
     }
 
     public function getDB()
     {
         return $this->_dbh;
     }
-    // parse json db into an array
+
+    /**
+     * Get data from db json file
+     * @return array of stdObject that contains db data
+     */
     public function getData()
     {
         return (array) json_decode(file_get_contents($this->_dbh, true));
     }
 
+    /**
+     * Save data to a json file
+     * @param mixed $data array with stdObject that contains data
+     */
     public function setData($data)
     {
         //encode the new array
@@ -38,63 +41,109 @@ class Tasks extends Model
     public function addTask($newData)
     {
         //DB decode to array, merge the 2 arrays, encode the new array, put contents in DB. Returns DB updated and decoded.
-        $dbData = $this->getData();
-        $mergedData = array_merge($dbData, $newData);
-        $encodedMerge = json_encode($mergedData, JSON_PRETTY_PRINT);
-        file_put_contents($this->_dbh, $encodedMerge);
-        return (array) json_decode(file_get_contents($this->_dbh));
+        if (isset($_POST["title"]) && isset($_POST["desc"]) && isset($_POST["status"])) {
+
+            $id = $this->getLastTaskID();
+            //++task_id to set new "task_id" value
+            $newData = array(
+                array_key_last($this->getData()) => array(
+                    "userId" => $this->getUserId(),
+                    "taskId" => ++$id,
+                    "title" => $_POST["title"],
+                    "desc" => $_POST["desc"],
+                    "status" => $_POST["status"],
+                    "startDate" => $this->setDate(),
+                    "modDate" => "",
+                    "endDate" => ""
+                )
+            );
+            $dbData = $this->getData();
+            $mergedData = array_merge($dbData, $newData);
+            $this->setData($mergedData);
+            return $this->getData();
+        }
     }
 
-    public function listTasks($user_id)
+    /**
+     * List all tasks of a user
+     * @return array array of tasks
+     */
+    public function listTasks()
     {
         $data = $this->getData();
-        $user_data = array();
+        $userData = array();
         foreach ($data as $task) {
-            if (($task->user_id == $user_id) &&(isset($task->task_id))) {
-                array_push($user_data, $task);
+            if (($task->userId == $this->getUserId()) && (isset($task->taskId))) {
+                array_push($userData, $task);
             }
         }
-        return $user_data;
+
+        return $userData;
     }
 
-    public function filter($user_id, $value)
+    /**
+     * It gets the list of all tasks for a user and returns only the ones that match with
+     * the selected status by user.
+     * @param array list of all tasks for a user
+     * @param mixed $value status value to filter
+     * @return array list of all tasks for a user filtered by status
+     */
+    public function statusFilter($userData, $value)
     {
-        $data = $this->listTasks($this->get_user_id());
-        $user_data = array();
-        foreach ($data as $task) {
+        $filteredUserData = array();
+        foreach ($userData as $task) {
             if (($task->status == $value)) {
-                array_push($user_data, $task);
+                array_push($filteredUserData, $task);
             }
         }
-        return $user_data;
+
+        return $filteredUserData;
     }
 
-    public function deleteTask($data, $taskId)
-    {
-        foreach($data as $key => $task){
-            if ($task->task_id == $taskId["task_id"]) {
-                unset($data[$key]);
-                array_values($data);
-            }
-        }
+    public function search($userData, $value){
         
-        file_put_contents($this->_dbh, json_encode($data, JSON_PRETTY_PRINT));
-        return (array) json_decode(file_get_contents($this->_dbh));
+        if (!isset($_GET)) {
+            $value = null;
+        } else {
+            $value = $_GET;
+        }
+        $showndata = $this->filterText($userData, $value['search']);
+        return $showndata;
     }
 
-    public function updateTask($data, $task_id)
+    public function filterText($userData, $value)
     {
-        //modify task_id task on $data
+        $newUserData = array();
+        foreach ($userData as $task) {
+            if ((str_contains(strtolower($task->title), strtolower($value))) || (str_contains(strtolower($task->desc), strtolower($value)))) {
+                array_push($newUserData, $task);
+            }
+        }
+        return $newUserData;
+    }
+    public function showSearch($searchedData){
+        $shownData = array();
+        foreach ($searchedData as $task) {
+            if (($task->userId == $this->getUserId()) && (isset($task->taskId))) {
+                array_push($shownData, $task);
+            }
+        }
+        return $shownData;
+    }
+
+    public function updateTask($data, $taskId)
+    {
+        //modify taskId task on $data
         foreach ($data as $task) {
-            if (($task->task_id == $task_id) && ($task->user_id == $_SESSION['user_id'])) {
+            if (($task->taskId == $taskId) && ($task->userId == $_SESSION['userId'])) {
                 $task->title = $_POST['title'];
                 $task->desc = $_POST['desc'];
                 if (($task->status != 'DONE') && ($_POST['status'] == 'DONE'))
-                    $task->end_date = $this->setDate();
+                    $task->endDate = $this->setDate();
                 $task->status = $_POST['status'];
-                if (($task->status != 'DONE') && isset($task->end_date)) 
-                    $task->end_date = "";
-                $task->mod_date = $this->setDate();
+                if (($task->status != 'DONE') && isset($task->endDate))
+                    $task->endDate = "";
+                $task->modDate = $this->setDate();
             }
         }
 
@@ -102,11 +151,23 @@ class Tasks extends Model
         $this->setData($data);
     }
 
-    public function getTask($task_id)
+    public function deleteTask($data, $taskId)
+    {
+        foreach ($data as $key => $task) {
+            if ($task->taskId == $taskId) {
+                unset($data[$key]);
+                array_values($data);
+            }
+        }
+        $this->setData($data);
+        return $this->getData();
+    }
+
+    public function getTask($taskId)
     {
         $data = $this->getData();
         foreach ($data as $task) {
-            if ($task->task_id == $task_id)
+            if ($task->taskId == $taskId)
                 return $task;
         }
         return null;
@@ -120,48 +181,15 @@ class Tasks extends Model
 
     public function getLastTaskID()
     {
-        //Gets last item from the DB to get the "task_id" value
+        //Gets last item from the DB to get the "taskId" value
         $dbData = $this->getData();
         $lastItem = end($dbData);
-        $lastItemId = $lastItem->{"task_id"};
+        $lastItemId = $lastItem->{"taskId"};
         return $lastItemId;
     }
-    public function validate_login()
+
+    public function getUserId()
     {
-        $data = $this->getData();
-        $user = $_POST['email'];
-        $pwd = $_POST['password'];
-
-        $user_id = $this->validate_user($data, $user, $pwd);
-
-        if (isset($user_id)) {
-            session_start();
-            $_SESSION['user_id'] = $user_id;
-            $_SESSION['email'] = $user;
-            $_SESSION['password'] = $pwd;
-            return true;
-        } else {
-            return false;
-        }
+        return $_SESSION['userId'];
     }
-
-    public function validate_user($data, $user, $pwd)
-    {
-        foreach ($data as $task) {
-            if (($task->email == $user) || ($task->name == $user)) {
-                if ($task->pwd == $pwd) {
-                    return $task->user_id;
-                }
-            }
-        }
-
-        return null;
-    }
-
-    public function get_user_id()
-    {
-        return $_SESSION['user_id'];
-    }
-
-
 }

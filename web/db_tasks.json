@@ -1,0 +1,42 @@
+[
+    {
+        "userId": 1,
+        "taskId": 1,
+        "title": "Title 1",
+        "desc": "This is a description",
+        "status": "TO DO",
+        "startDate": "06:39:14 pm 12\/01\/2023",
+        "modDate": "05:25:45 pm 15\/01\/2023",
+        "endDate": ""
+    },
+    {
+        "userId": 2,
+        "taskId": 1,
+        "title": "Task 1 User 2",
+        "desc": "Desc 1 User 2",
+        "status": "TO DO",
+        "startDate": "06:39:14 pm 12\/01\/2023",
+        "modDate": "",
+        "endDate": ""
+    },
+    {
+        "userId": 1,
+        "taskId": 2,
+        "title": "Task 3",
+        "desc": "Desc 3",
+        "status": "DOING",
+        "startDate": "06:39:14 pm 12\/01\/2023",
+        "modDate": "",
+        "endDate": ""
+    },
+    {
+        "userId": 1,
+        "taskId": 3,
+        "title": "Task4",
+        "desc": "bla",
+        "status": "TO DO",
+        "startDate": "05:35:26 pm 15\/01\/2023",
+        "modDate": "",
+        "endDate": ""
+    }
+]
