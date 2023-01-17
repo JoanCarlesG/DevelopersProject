@@ -37,7 +37,7 @@ while ($i < count($data)) {
             <div class="text-sm text-right font-medium text-blue-400 leading-none">
                 <?php echo "<a class='flex' href='update_task?taskId=" . $taskId . "'><i class='fa-solid fa-pen-to-square'></i>&nbspEdit</a>" ?>
             </div>
-            <div class="text-sm items-center text-right text-red-400 font-medium leading-none">
+            <div onclick="confirmDelete()" class="text-sm items-center text-right text-red-400 font-medium leading-none">
                 <?php echo "<a class='flex' href='delete?taskId=" . $taskId . "'><i class='fa-solid fa-trash'></i>&nbspDelete</a>" ?>
             </div>
         </div>
@@ -46,3 +46,8 @@ while ($i < count($data)) {
     $i++;
 }
 ?>
+<script>
+function confirmDelete() {
+  confirm("Are you sure you want to delete this task?");
+}
+</script>
