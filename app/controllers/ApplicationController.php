@@ -98,8 +98,7 @@ class ApplicationController extends Controller
     {
         if (!empty($_GET)) {
             $model = new Tasks;
-            $data = $model->getData();
-            $model->deleteTask($data, $_GET['taskId']);
+            $model->deleteTask($_GET['taskId']);
             header("Location: home");
         }
         ;
