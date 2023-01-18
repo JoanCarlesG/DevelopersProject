@@ -61,15 +61,13 @@ class ApplicationController extends Controller
         return $userData;
     }
 
-    function savedAction($data = array())
+    function savedAction()
     {
         if (!empty($_POST)) {
             $model = new Tasks;
-            $model->addTask($data);
-            echo '<div class="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-gray-800 dark:text-red-400" role="alert"><span class="font-medium">Danger alert!</span> Saved Data.</div>';
+            $model->addTask();
             header("Location: home");
         } else {
-            echo '<div class="p-4 mb-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-gray-800 dark:text-red-400" role="alert"><span class="font-medium">Danger alert!</span> The fields are empty.</div>';
             header("Location: task");
         }
         $this->view;

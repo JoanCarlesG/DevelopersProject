@@ -39,29 +39,28 @@ class Tasks extends Model implements TasksInterface
         file_put_contents($this->_dbh, $encodedMerge);
     }
 
-    public function addTask($newData)
+    public function addTask()
     {
-        //DB decode to array, merge the 2 arrays, encode the new array, put contents in DB. Returns DB updated and decoded.
         if (isset($_POST["title"]) && isset($_POST["desc"]) && isset($_POST["status"])) {
-
-            $id = $this->getLastTaskID();
-            //++task_id to set new "task_id" value
-            $newData = array(
-                array_key_last($this->getData()) => array(
-                    "userId" => $this->getUserId(),
-                    "taskId" => ++$id,
-                    "title" => $_POST["title"],
-                    "desc" => $_POST["desc"],
-                    "status" => $_POST["status"],
-                    "startDate" => $this->setDate(),
-                    "modDate" => "",
-                    "endDate" => ""
-                )
-            );
-            $dbData = $this->getData();
-            $mergedData = array_merge($dbData, $newData);
-            $this->setData($mergedData);
-            return $this->getData();
+            $userId = $this->getUserId();
+            $title = $_POST['title'];
+            $description = $_POST['desc'];
+            $status = $_POST['status'];
+            $startDate = $this->setDate();
+            
+            if (!$this->getDB()){
+                die("Connection failed");
+              };
+            // h:i:s a d/m/Y -- %h:%i:%s %p %d/%m/%Y
+            $query = "INSERT INTO tasks (userId, title, description, status, startDate) 
+                        VALUES ($userId, '$title', '$description', '$status', STR_TO_DATE('$startDate','%h:%i:%s %p %d/%m/%Y'))";
+            $addQuery = mysqli_query($this->getDB(), $query);
+            if (!$addQuery){
+                echo "Error: " . $query . "<br>" . mysqli_error($this->getDB());
+            } 
+            mysqli_close($this->getDB());
+            
+            return true;
         }
     }
 
