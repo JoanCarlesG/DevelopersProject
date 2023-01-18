@@ -49,14 +49,13 @@ class Users extends Model implements UsersInterface
             die("Connection failed");
         }
 
-        session_start();
-
         $user = $_POST['email'];
         $pwd = $_POST['password'];
 
         $userData = mysqli_query($this->getDB(), "SELECT * FROM users WHERE (name = '$user' OR email = '$user')");
 
-        if ($userData) {
+        if (mysqli_num_rows($userData) == 1) {
+            session_start();
             $row = mysqli_fetch_array($userData);
             if ($this->validateUser($row, $pwd)) {
                 $_SESSION['userId'] = $row['userId'];
