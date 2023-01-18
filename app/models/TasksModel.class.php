@@ -100,12 +100,12 @@ class Tasks extends Model implements TasksInterface
 
     public function search($userData, $value)
     {
-
         if (!isset($_GET)) {
             $value = null;
         } else {
             $value = $_GET;
         }
+        
         $showndata = $this->filterText($userData, $value['search']);
         return $showndata;
     }
@@ -114,7 +114,7 @@ class Tasks extends Model implements TasksInterface
     {
         $newUserData = array();
         foreach ($userData as $task) {
-            if ((str_contains(strtolower($task->title), strtolower($value))) || (str_contains(strtolower($task->desc), strtolower($value)))) {
+            if ((str_contains(strtolower($task->title), strtolower($value))) || (str_contains(strtolower($task->description), strtolower($value)))) {
                 array_push($newUserData, $task);
             }
         }
