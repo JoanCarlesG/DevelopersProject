@@ -3,14 +3,14 @@
 /**
  * Tasks class for handling tasks data
  */
-class Tasks extends Model
+class Tasks extends Model implements TasksInterface
 {
     public function __construct()
     {
         $settings = parse_ini_file(ROOT_PATH . '/config/settings.ini', true);
 
-        $this->_dbh = mysqli_connect($settings['database']['host'], $settings['database']['user'], $settings['database']['password'],$settings['database']['dbname']);
- 
+        $this->_dbh = mysqli_connect($settings['database']['host'], $settings['database']['user'], $settings['database']['password'], $settings['database']['dbname']);
+        $this->_setTable("tasks");
     }
 
     public function getDB()
@@ -24,7 +24,6 @@ class Tasks extends Model
      */
     public function getData()
     {
-        return (array) json_decode(file_get_contents($this->_dbh, true));
     }
 
     /**
@@ -71,14 +70,12 @@ class Tasks extends Model
      */
     public function listTasks()
     {
-        $data = $this->getData();
+        $query = ("SELECT * FROM " . $this->_table . " WHERE userId = " . $_SESSION['userId']);
+        $data = mysqli_query($this->getDB(), $query);
         $userData = array();
-        foreach ($data as $task) {
-            if (($task->userId == $this->getUserId()) && (isset($task->taskId))) {
-                array_push($userData, $task);
-            }
+        while ($task = mysqli_fetch_object($data)) {
+            array_push($userData, $task);
         }
-
         return $userData;
     }
 
@@ -101,8 +98,9 @@ class Tasks extends Model
         return $filteredUserData;
     }
 
-    public function search($userData, $value){
-        
+    public function search($userData, $value)
+    {
+
         if (!isset($_GET)) {
             $value = null;
         } else {
@@ -122,7 +120,8 @@ class Tasks extends Model
         }
         return $newUserData;
     }
-    public function showSearch($searchedData){
+    public function showSearch($searchedData)
+    {
         $shownData = array();
         foreach ($searchedData as $task) {
             if (($task->userId == $this->getUserId()) && (isset($task->taskId))) {

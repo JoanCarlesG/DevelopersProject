@@ -10,6 +10,7 @@ class Users extends Model implements UsersInterface
         $settings = parse_ini_file(ROOT_PATH . '/config/settings.ini', true);
 
         $this->_dbh = mysqli_connect($settings['database']['host'], $settings['database']['user'], $settings['database']['password'],$settings['database']['dbname']);
+        $this->_setTable("users");
     }
 
     public function getDB()
@@ -23,7 +24,6 @@ class Users extends Model implements UsersInterface
      */
     public function getData()
     {
-        return (array) json_decode(file_get_contents($this->_dbh, true));
     }
 
     /**
@@ -50,18 +50,18 @@ class Users extends Model implements UsersInterface
         $user = $_POST['email'];
         $pwd = $_POST['password'];
 
-        $query = mysqli_query($this->_dbh, "SELECT * FROM users WHERE (name = '$user' OR email = '$user') AND pwd = '$pwd'");
-        
+        $query = mysqli_query($this->getDB(), "SELECT * FROM users WHERE (name = '$user' OR email = '$user')");
+
         if ($query) {
             $row = mysqli_fetch_array($query);
-            $_SESSION['userId'] = $row['userId'];
-            $_SESSION['email'] = $row['email'];
-            $_SESSION['password'] = $row['pwd'];
-            $_SESSION['name'] = $row['name'];
-            return true;
-        } else {
-            return false;
+            if ($this->validateUser($row, $pwd)) {
+                $_SESSION['userId'] = $row['userId'];
+                $_SESSION['email'] = $row['email'];
+                return true;
+            }
         }
+            
+        return false;
     }
 
     /**
@@ -71,16 +71,11 @@ class Users extends Model implements UsersInterface
      * @param string $pwd pwd entered in the form
      * @return mixed userId if user is on db
      */
-    public function validateUser($data, $user, $pwd)
+    public function validateUser($data, $pwd)
     {
-        foreach ($data as $dbUser) {
-            if (($dbUser->email == $user) || ($dbUser->name == $user)) {
-                if ($dbUser->pwd == $pwd) {
-                    return $dbUser->userId;
-                }
-            }
-        }
-        return null;
+        $dbPwd = password_hash($data['pwd'],PASSWORD_DEFAULT);
+
+        return password_verify($pwd, $dbPwd);
     }
 
     public function getUserId()
