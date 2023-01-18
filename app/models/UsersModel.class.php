@@ -80,9 +80,7 @@ class Users extends Model implements UsersInterface
      */
     public function validateUser($data, $pwd)
     {
-        $dbPwd = password_hash($data['pwd'],PASSWORD_DEFAULT);
-
-        return password_verify($pwd, $dbPwd);
+        return password_verify($pwd, $data['pwd']);
     }
 
     public function getUserId()
@@ -95,7 +93,8 @@ class Users extends Model implements UsersInterface
         if (isset($_POST['username']) && isset($_POST['email']) && isset($_POST['password'])) {
             $name = $_POST['username'];
             $user = $_POST['email'];
-            $pwd = $_POST['password'];
+            $pwd = password_hash($_POST['password'],PASSWORD_DEFAULT);
+            
 
             if (!$this->getDB()) {
                 die("Connection failed");

@@ -153,8 +153,9 @@ class Tasks extends Model implements TasksInterface
         $this->setData($data);
     }
 
-    public function deleteTask($data, $taskId)
+    public function deleteTask($taskId)
     {
+        $data = $this->getData();
         foreach ($data as $key => $task) {
             if ($task->taskId == $taskId) {
                 unset($data[$key]);
