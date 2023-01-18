@@ -131,8 +131,10 @@ class Tasks extends Model implements TasksInterface
         return $shownData;
     }
 
-    public function updateTask($data, $taskId)
+    public function updateTask($taskId)
     {
+        $data = $this->getData();
+
         //modify taskId task on $data
         foreach ($data as $task) {
             if (($task->taskId == $taskId) && ($task->userId == $_SESSION['userId'])) {
