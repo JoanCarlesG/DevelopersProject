@@ -9,7 +9,7 @@ class Users extends Model implements UsersInterface
     {
         $settings = parse_ini_file(ROOT_PATH . '/config/settings.ini', true);
 
-        $this->_dbh = mysqli_connect($settings['database']['host'], $settings['database']['user'], $settings['database']['password'],$settings['database']['dbname']);
+        $this->_dbh = mysqli_connect($settings['database']['host'], $settings['database']['user'], $settings['database']['password'], $settings['database']['dbname']);
         $this->_setTable("users");
     }
 
@@ -45,22 +45,29 @@ class Users extends Model implements UsersInterface
      */
     public function validateLogin()
     {
+        if (!$this->getDB()) {
+            die("Connection failed");
+        }
+
         session_start();
 
         $user = $_POST['email'];
         $pwd = $_POST['password'];
 
-        $query = mysqli_query($this->getDB(), "SELECT * FROM users WHERE (name = '$user' OR email = '$user')");
+        $userData = mysqli_query($this->getDB(), "SELECT * FROM users WHERE (name = '$user' OR email = '$user')");
 
-        if ($query) {
-            $row = mysqli_fetch_array($query);
+        if ($userData) {
+            $row = mysqli_fetch_array($userData);
             if ($this->validateUser($row, $pwd)) {
                 $_SESSION['userId'] = $row['userId'];
                 $_SESSION['email'] = $row['email'];
+                $_SESSION['name'] = $row['name'];
+                mysqli_close($this->getDB());
                 return true;
             }
         }
-            
+
+        mysqli_close($this->getDB());
         return false;
     }
 
@@ -89,18 +96,19 @@ class Users extends Model implements UsersInterface
             $name = $_POST['username'];
             $user = $_POST['email'];
             $pwd = $_POST['password'];
-            
-            if (!$this->getDB()){
+
+            if (!$this->getDB()) {
                 die("Connection failed");
-              };
+            }
+            ;
 
             $query = "INSERT INTO users (name, email, pwd) VALUES ('$name', '$user', '$pwd')";
             $addQuery = mysqli_query($this->getDB(), $query);
-            if (!$addQuery){
+            if (!$addQuery) {
                 echo "Error: " . $query . "<br>" . mysqli_error($this->getDB());
-            } 
+            }
             mysqli_close($this->getDB());
-            
+
             return true;
         }
     }
