@@ -51,12 +51,13 @@ class Users extends Model implements UsersInterface
         $pwd = $_POST['password'];
 
         $query = mysqli_query($this->_dbh, "SELECT * FROM users WHERE (name = '$user' OR email = '$user') AND pwd = '$pwd'");
-
+        
         if ($query) {
             $row = mysqli_fetch_array($query);
             $_SESSION['userId'] = $row['userId'];
             $_SESSION['email'] = $row['email'];
             $_SESSION['password'] = $row['pwd'];
+            $_SESSION['name'] = $row['name'];
             return true;
         } else {
             return false;
@@ -89,34 +90,23 @@ class Users extends Model implements UsersInterface
 
     public function addUser()
     {
-        if (isset($_POST["username"]) && isset($_POST["email"]) && isset($_POST["password"])) {
-            if (!($this->validateLogin())) {
-                $name = $_POST['username'];
-                $user = $_POST['email'];
-                $pwd = $_POST['password'];
-                $lastID = $this->getLastUserID();
+        if (isset($_POST['username']) && isset($_POST['email']) && isset($_POST['password'])) {
+            $name = $_POST['username'];
+            $user = $_POST['email'];
+            $pwd = $_POST['password'];
+            
+            if (!$this->getDB()){
+                die("Connection failed");
+              };
 
-                $newData = array(
-                    array_key_last($this->getData()) => array(
-                        "userId" => ++$lastID,
-                        "email" => $user,
-                        "pwd" => $pwd,
-                        "name" => $name,
-                    )
-                );
-                $dbData = $this->getData();
-                $mergedData = array_merge($dbData, $newData);
-                $this->setData($mergedData);
-                return $this->getData();
-            }
+            $query = "INSERT INTO users (name, email, pwd) VALUES ('$name', '$user', '$pwd')";
+            $addQuery = mysqli_query($this->getDB(), $query);
+            if (!$addQuery){
+                echo "Error: " . $query . "<br>" . mysqli_error($this->getDB());
+            } 
+            mysqli_close($this->getDB());
+            
+            return true;
         }
-    }
-    public function getLastUserID()
-    {
-        //Gets last item from the DB to get the "userId" value
-        $dbData = $this->getData();
-        $lastItem = end($dbData);
-        $lastItemId = $lastItem->{"userId"};
-        return $lastItemId;
     }
 }
