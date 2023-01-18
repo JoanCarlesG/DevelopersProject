@@ -123,7 +123,7 @@ class ApplicationController extends Controller
         $this->view->setLayout("loginLayout");
         if (!empty($_POST)) {
             $model = new Users;
-            if ($model->addUser($_POST)) {
+            if ($model->addUser()) {
                 $_POST = array();
                 header("Location: ./");
             }
