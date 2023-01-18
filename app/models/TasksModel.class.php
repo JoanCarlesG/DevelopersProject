@@ -47,19 +47,19 @@ class Tasks extends Model implements TasksInterface
             $description = $_POST['desc'];
             $status = $_POST['status'];
             $startDate = $this->setDate();
-            
-            if (!$this->getDB()){
+
+            if (!$this->getDB()) {
                 die("Connection failed");
-              };
+            };
             // h:i:s a d/m/Y -- %h:%i:%s %p %d/%m/%Y
             $query = "INSERT INTO tasks (userId, title, description, status, startDate) 
                         VALUES ($userId, '$title', '$description', '$status', STR_TO_DATE('$startDate','%h:%i:%s %p %d/%m/%Y'))";
             $addQuery = mysqli_query($this->getDB(), $query);
-            if (!$addQuery){
+            if (!$addQuery) {
                 echo "Error: " . $query . "<br>" . mysqli_error($this->getDB());
-            } 
+            }
             mysqli_close($this->getDB());
-            
+
             return true;
         }
     }
@@ -151,16 +151,16 @@ class Tasks extends Model implements TasksInterface
         $this->setData($data);
     }
 
-    public function deleteTask($data, $taskId)
+    public function deleteTask($taskId)
     {
-        foreach ($data as $key => $task) {
-            if ($task->taskId == $taskId) {
-                unset($data[$key]);
-                array_values($data);
-            }
+        $query = "DELETE FROM tasks WHERE taskId = '$taskId'";
+        $deleteQuery = mysqli_query($this->getDB(), $query);
+        if (!$deleteQuery) {
+            echo "Error: " . $query . "<br>" . mysqli_error($this->getDB());
         }
-        $this->setData($data);
-        return $this->getData();
+        mysqli_close($this->getDB());
+
+        return true;
     }
 
     public function getTask($taskId)

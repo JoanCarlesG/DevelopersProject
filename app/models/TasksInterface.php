@@ -12,6 +12,6 @@ interface TasksInterface
     //public function statusFilter($userData, $value){}
     public function search($userData,$value);
     public function updateTask($data, $tasakId);
-    public function deleteTask($data,$taskId);
+    public function deleteTask($taskId);
     
 }
