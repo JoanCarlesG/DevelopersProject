@@ -5,7 +5,7 @@
  */
 interface TasksInterface
 {
-    public function addTask($newData);
+    public function addTask();
     public function listTasks();
     //public function statusFilter($userData, $value){}
     public function search($userData,$value);
