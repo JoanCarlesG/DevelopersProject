@@ -53,7 +53,7 @@ class Tasks extends Model implements TasksInterface
               };
 
             $query = "INSERT INTO tasks (userId, title, description, status, startDate) 
-                        VALUES ($userId, '$title', '$description', '$status', $startDate)";
+                        VALUES ($userId, '$title', '$description', '$status', '$startDate')";
             $addQuery = mysqli_query($this->getDB(), $query);
             if (!$addQuery){
                 echo "Error: " . $query . "<br>" . mysqli_error($this->getDB());

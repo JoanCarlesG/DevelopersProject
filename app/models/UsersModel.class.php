@@ -57,6 +57,7 @@ class Users extends Model implements UsersInterface
             if ($this->validateUser($row, $pwd)) {
                 $_SESSION['userId'] = $row['userId'];
                 $_SESSION['email'] = $row['email'];
+                $_SESSION['name'] = $row['name'];
                 return true;
             }
         }
