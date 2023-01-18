@@ -18,27 +18,6 @@ class Tasks extends Model implements TasksInterface
         return $this->_dbh;
     }
 
-    /**
-     * Get data from db json file
-     * @return array of stdObject that contains db data
-     */
-    public function getData()
-    {
-    }
-
-    /**
-     * Save data to a json file
-     * @param mixed $data array with stdObject that contains data
-     */
-    public function setData($data)
-    {
-        //encode the new array
-        $encodedMerge = json_encode($data, JSON_PRETTY_PRINT);
-
-        //put content in DB
-        file_put_contents($this->_dbh, $encodedMerge);
-    }
-
     public function addTask($newData)
     {
         //DB decode to array, merge the 2 arrays, encode the new array, put contents in DB. Returns DB updated and decoded.
@@ -132,24 +111,26 @@ class Tasks extends Model implements TasksInterface
         return $shownData;
     }
 
-    public function updateTask($data, $taskId)
+    public function updateTask($taskId)
     {
         //modify taskId task on $data
-        foreach ($data as $task) {
-            if (($task->taskId == $taskId) && ($task->userId == $_SESSION['userId'])) {
-                $task->title = $_POST['title'];
-                $task->desc = $_POST['desc'];
-                if (($task->status != 'DONE') && ($_POST['status'] == 'DONE'))
-                    $task->endDate = $this->setDate();
-                $task->status = $_POST['status'];
-                if (($task->status != 'DONE') && isset($task->endDate))
-                    $task->endDate = "";
-                $task->modDate = $this->setDate();
+        $task = $this->getTask($taskId);
+        if (isset($task)) {
+            $title = $_POST['title'];
+            $desc = $_POST['description'];
+            $endDate = "NULL";
+            if (($task->status != 'DONE') && ($_POST['status'] == 'DONE')) {
+                $endDate = $this->setDate();
             }
+            $status = $_POST['status'];
+            if (($task->status != 'DONE') && isset($task->endDate)) {
+                $endDate = "NULL";
+            }
+            $modDate = $this->setDate();
         }
 
-        //save new data on db
-        $this->setData($data);
+        $query = "UPDATE $this->_table SET title = '$title', description = '$desc', status = '$status', modDate = STR_TO_DATE('$modDate','%h:%i:%s %p %d/%m/%Y'), endDate = STR_TO_DATE('$endDate','%h:%i:%s %p %d/%m/%Y') WHERE taskId = $taskId";
+        mysqli_query($this->getDB(), $query);
     }
 
     public function deleteTask($data, $taskId)
@@ -166,10 +147,10 @@ class Tasks extends Model implements TasksInterface
 
     public function getTask($taskId)
     {
-        $data = $this->getData();
-        foreach ($data as $task) {
-            if ($task->taskId == $taskId)
-                return $task;
+        $query = "SELECT * FROM " . $this->_table . " WHERE taskId = " . $taskId;
+        $task = mysqli_query($this->getDB(), $query);
+        if (mysqli_num_rows($task) == 1) {
+            return mysqli_fetch_object($task);
         }
         return null;
     }

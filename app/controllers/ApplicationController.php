@@ -89,7 +89,7 @@ class ApplicationController extends Controller
         if (empty($_POST)) {
             $this->view->__set('data', $model->getTask($taskId));
         } else {
-            $model->updateTask($model->getData(), $taskId);
+            $model->updateTask($taskId);
             header("Location: home");
         }
     }
