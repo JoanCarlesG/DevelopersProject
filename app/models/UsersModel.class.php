@@ -24,10 +24,6 @@ class Users extends Model implements UsersInterface
      */
     public function getData()
     {
-        $query = ("SELECT * FROM" . $this->_table);
-        $data = mysqli_query($this->getDB(), $query);
-
-        return mysqli_fetch_array($data);
     }
 
     /**
