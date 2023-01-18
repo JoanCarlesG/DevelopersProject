@@ -20,10 +20,10 @@ class Tasks extends Model implements TasksInterface
     
 public function addTask()
     {
-        if (isset($_POST["title"]) && isset($_POST["desc"]) && isset($_POST["status"])) {
+        if (isset($_POST["title"]) && isset($_POST["description"]) && isset($_POST["status"])) {
             $userId = $this->getUserId();
             $title = $_POST['title'];
-            $description = $_POST['desc'];
+            $description = $_POST['description'];
             $status = $_POST['status'];
             $startDate = $this->setDate();
 
@@ -31,9 +31,9 @@ public function addTask()
                 die("Connection failed");
             };
             // h:i:s a d/m/Y -- %h:%i:%s %p %d/%m/%Y
-            $query = "INSERT INTO tasks (userId, title, description, status, startDate) 
-                        VALUES ($userId, '$title', '$description', '$status', STR_TO_DATE('$startDate','%h:%i:%s %p %d/%m/%Y'))";
+            $query = "INSERT INTO tasks (userId, title, description, status, startDate) VALUES ($userId, '$title', '$description', '$status', STR_TO_DATE('$startDate','%h:%i:%s %p %d/%m/%Y'))";
             $addQuery = mysqli_query($this->getDB(), $query);
+
             if (!$addQuery) {
                 echo "Error: " . $query . "<br>" . mysqli_error($this->getDB());
             }
