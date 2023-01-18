@@ -7,8 +7,9 @@ class Users extends Model implements UsersInterface
 {
     public function __construct()
     {
-        // parse the settings file
-        $this->_dbh = ROOT_PATH . '/web/' . 'db_users.json';
+        $settings = parse_ini_file(ROOT_PATH . '/config/settings.ini', true);
+
+        $this->_dbh = mysqli_connect($settings['database']['host'], $settings['database']['user'], $settings['database']['password'],$settings['database']['dbname']);
     }
 
     public function getDB()
@@ -44,17 +45,18 @@ class Users extends Model implements UsersInterface
      */
     public function validateLogin()
     {
-        $data = $this->getData();
+        session_start();
+
         $user = $_POST['email'];
         $pwd = $_POST['password'];
 
-        $userId = $this->validateUser($data, $user, $pwd);
+        $query = mysqli_query($this->_dbh, "SELECT * FROM users WHERE (name = '$user' OR email = '$user') AND pwd = '$pwd'");
 
-        if (isset($userId)) {
-            session_start();
-            $_SESSION['userId'] = $userId;
-            $_SESSION['email'] = $user;
-            $_SESSION['password'] = $pwd;
+        if ($query) {
+            $row = mysqli_fetch_array($query);
+            $_SESSION['userId'] = $row['userId'];
+            $_SESSION['email'] = $row['email'];
+            $_SESSION['password'] = $row['pwd'];
             return true;
         } else {
             return false;
@@ -97,7 +99,7 @@ class Users extends Model implements UsersInterface
                 $newData = array(
                     array_key_last($this->getData()) => array(
                         "userId" => ++$lastID,
-                        "email" =>  $user,
+                        "email" => $user,
                         "pwd" => $pwd,
                         "name" => $name,
                     )

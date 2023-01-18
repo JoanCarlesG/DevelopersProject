@@ -3,7 +3,7 @@
 /**
  * Tasks class for handling tasks data
  */
-class Tasks extends Model implements TasksInterface
+class Tasks extends Model
 {
     public function __construct()
     {
