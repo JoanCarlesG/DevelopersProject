@@ -51,9 +51,9 @@ class Tasks extends Model implements TasksInterface
             if (!$this->getDB()){
                 die("Connection failed");
               };
-
+            // h:i:s a d/m/Y -- %h:%i:%s %p %d/%m/%Y
             $query = "INSERT INTO tasks (userId, title, description, status, startDate) 
-                        VALUES ($userId, '$title', '$description', '$status', '$startDate')";
+                        VALUES ($userId, '$title', '$description', '$status', STR_TO_DATE('$startDate','%h:%i:%s %p %d/%m/%Y'))";
             $addQuery = mysqli_query($this->getDB(), $query);
             if (!$addQuery){
                 echo "Error: " . $query . "<br>" . mysqli_error($this->getDB());
