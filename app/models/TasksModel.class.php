@@ -7,8 +7,10 @@ class Tasks extends Model
 {
     public function __construct()
     {
-        // parse the settings file
-        $this->_dbh = ROOT_PATH . '/web/' . 'db_tasks.json';
+        $settings = parse_ini_file(ROOT_PATH . '/config/settings.ini', true);
+
+        $this->_dbh = mysqli_connect($settings['database']['host'], $settings['database']['user'], $settings['database']['password'],$settings['database']['dbname']);
+ 
     }
 
     public function getDB()
@@ -38,29 +40,28 @@ class Tasks extends Model
         file_put_contents($this->_dbh, $encodedMerge);
     }
 
-    public function addTask($newData)
+    public function addTask()
     {
-        //DB decode to array, merge the 2 arrays, encode the new array, put contents in DB. Returns DB updated and decoded.
         if (isset($_POST["title"]) && isset($_POST["desc"]) && isset($_POST["status"])) {
+            $userId = $this->getUserId();
+            $title = $_POST['title'];
+            $description = $_POST['desc'];
+            $status = $_POST['status'];
+            $startDate = $this->setDate();
+            
+            if (!$this->getDB()){
+                die("Connection failed");
+              };
 
-            $id = $this->getLastTaskID();
-            //++task_id to set new "task_id" value
-            $newData = array(
-                array_key_last($this->getData()) => array(
-                    "userId" => $this->getUserId(),
-                    "taskId" => ++$id,
-                    "title" => $_POST["title"],
-                    "desc" => $_POST["desc"],
-                    "status" => $_POST["status"],
-                    "startDate" => $this->setDate(),
-                    "modDate" => "",
-                    "endDate" => ""
-                )
-            );
-            $dbData = $this->getData();
-            $mergedData = array_merge($dbData, $newData);
-            $this->setData($mergedData);
-            return $this->getData();
+            $query = "INSERT INTO tasks (userId, title, description, status, startDate) 
+                        VALUES ($userId, '$title', '$description', '$status', $startDate)";
+            $addQuery = mysqli_query($this->getDB(), $query);
+            if (!$addQuery){
+                echo "Error: " . $query . "<br>" . mysqli_error($this->getDB());
+            } 
+            mysqli_close($this->getDB());
+            
+            return true;
         }
     }
 
