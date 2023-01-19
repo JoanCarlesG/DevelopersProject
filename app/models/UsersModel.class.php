@@ -19,14 +19,6 @@ class Users extends Model
     }
 
     /**
-     * Get data from db json file
-     * @return array of stdObject that contains db data
-     */
-    public function getData()
-    {
-    }
-
-    /**
      * Save data to a db json file
      * @param mixed $data array with stdObject that contains data
      */
