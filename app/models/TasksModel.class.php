@@ -117,18 +117,23 @@ public function addTask()
         if (isset($task)) {
             $title = $_POST['title'];
             $desc = $_POST['description'];
-            $endDate = "NULL";
+            $endDate = 'NULL';
             if (($task->status != 'DONE') && ($_POST['status'] == 'DONE')) {
                 $endDate = $this->setDate();
             }
             $status = $_POST['status'];
             if (($task->status != 'DONE') && isset($task->endDate)) {
-                $endDate = "NULL";
+                $endDate = 'NULL';
             }
             $modDate = $this->setDate();
         }
 
-        $query = "UPDATE $this->_table SET title = '$title', description = '$desc', status = '$status', modDate = STR_TO_DATE('$modDate','%h:%i:%s %p %d/%m/%Y'), endDate = STR_TO_DATE('$endDate','%h:%i:%s %p %d/%m/%Y') WHERE taskId = $taskId";
+        if(is_null($endDate)){
+            $query = "UPDATE $this->_table SET title = '$title', description = '$desc', status = '$status', modDate = STR_TO_DATE('$modDate','%h:%i:%s %p %d/%m/%Y'), endDate = $endDate WHERE taskId = $taskId";
+        } else {
+            $query = "UPDATE $this->_table SET title = '$title', description = '$desc', status = '$status', modDate = STR_TO_DATE('$modDate','%h:%i:%s %p %d/%m/%Y'), endDate = STR_TO_DATE('$endDate','%h:%i:%s %p %d/%m/%Y') WHERE taskId = $taskId";
+        }
+    
         mysqli_query($this->getDB(), $query);
     }
 
