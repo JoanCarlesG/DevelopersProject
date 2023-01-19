@@ -3,7 +3,7 @@
 /**
  * Tasks class for handling tasks data
  */
-class Tasks extends Model implements TasksInterface
+class Tasks extends Model
 {
     public function __construct()
     {
@@ -158,15 +158,6 @@ public function addTask()
     {
         //Sets timestamp in this format => Hour:Min:Sec Day/Month/Year
         return (date('h:i:s a d/m/Y', time()));
-    }
-
-    public function getLastTaskID()
-    {
-        //Gets last item from the DB to get the "taskId" value
-        $dbData = $this->getData();
-        $lastItem = end($dbData);
-        $lastItemId = $lastItem->{"taskId"};
-        return $lastItemId;
     }
 
     public function getUserId()
