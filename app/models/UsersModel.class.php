@@ -49,10 +49,9 @@ class Users extends Model
         $pwd = $_POST['password'];
 
         $userId = $this->validateUser($data, $user, $pwd);
-        $userName = $this->getUserName($data, $user, $pwd);
+        $userName = $this->getUserName($data, $user);
 
         if (isset($userId)) {
-            session_start();
             $_SESSION['userId'] = $userId;
             $_SESSION['email'] = $user;
             $_SESSION['password'] = $pwd;
@@ -62,7 +61,7 @@ class Users extends Model
             return false;
         }
     }
-
+    
     /**
      * Check if the user data entered in the form are valid for the log in
      * @param mixed $data with users db
@@ -74,20 +73,18 @@ class Users extends Model
     {
         foreach ($data as $dbUser) {
             if (($dbUser->email == $user) || ($dbUser->name == $user)) {
-                if ($dbUser->pwd == $pwd) {
+                if (password_verify($pwd, $dbUser->pwd)) {
                     return $dbUser->userId;
                 }
             }
         }
         return null;
     }
-    public function getUserName($data, $user, $pwd)
+    public function getUserName($data, $user)
     {
         foreach ($data as $dbUser) {
             if (($dbUser->email == $user) || ($dbUser->name == $user)) {
-                if ($dbUser->pwd == $pwd) {
-                    return $dbUser->name;
-                }
+                return $dbUser->name;
             }
         }
         return null;
@@ -104,13 +101,13 @@ class Users extends Model
             if (!($this->validateLogin())) {
                 $name = $_POST['username'];
                 $user = $_POST['email'];
-                $pwd = $_POST['password'];
+                $pwd = password_hash($_POST['password'],PASSWORD_DEFAULT);
                 $lastID = $this->getLastUserID();
 
                 $newData = array(
                     array_key_last($this->getData()) => array(
                         "userId" => ++$lastID,
-                        "email" =>  $user,
+                        "email" => $user,
                         "pwd" => $pwd,
                         "name" => $name,
                     )

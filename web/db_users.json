@@ -10,5 +10,11 @@
         "email": "seconduser@email.com",
         "pwd": "1234",
         "name": "SecondUser"
+    },
+    {
+        "userId": 3,
+        "email": "admin@email.com",
+        "pwd": "$2y$10$9XPHcf4devPBEmEJM77h4uhkNHCn6gphrvRiFjGYIM\/hLkM3Rhthe",
+        "name": "John"
     }
 ]
